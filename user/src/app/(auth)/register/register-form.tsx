@@ -143,47 +143,9 @@ const RegisterForm = () => {
           )}
         />
 
-        <label
-          htmlFor="termRegister"
-          className="my-4 text-[#414042] text-[16px] font-medium cursor-pointer inline-block group select-none"
-        >
-          <div
-            className={
-              isChecked
-                ? "inline-flex h-12 w-12 items-center justify-center rounded-full group-hover:bg-[#cb4040] group-hover:bg-opacity-20"
-                : "inline-flex h-12 w-12 items-center justify-center rounded-full group-hover:bg-[#a6a6a6] group-hover:bg-opacity-20"
-            }
-          >
-            <Checkbox
-              onCheckedChange={() => {
-                setIsChecked(!isChecked);
-              }}
-              id="termRegister"
-              className={
-                isChecked
-                  ? "data-[state=checked]:bg-primary[data-state=checked] w-6 h-6 border-red-600 border-2 bg-red-600"
-                  : "w-6 h-6  border-2"
-              }
-            />
-          </div>
-          Tôi đã đọc và đồng ý với các{" "}
-          <Link href={"#"} className="text-[#0e2eed]">
-            Điều khoản dịch vụ
-          </Link>{" "}
-          và{" "}
-          <Link href={"#"} className="text-[#0e2eed]">
-            Chính sách quyền riêng tư
-          </Link>{" "}
-          của ITviec liên quan đến thông tin riêng tư của bạn.
-        </label>
-
         <Button
           type="submit"
-          className={
-            isChecked
-              ? "!mt-8 w-full h-11 bg-[#ED1B2F] hover:bg-[#c83333] text-[16px]"
-              : "!mt-8 w-full h-11 bg-[#a6a6a6] text-[16px] pointer-events-none"
-          }
+          className={"!mt-8 w-full h-11 bg-[green] hover:bg-[#006400] text-[16px]"}
         >
           Đăng ký bằng Email
         </Button>

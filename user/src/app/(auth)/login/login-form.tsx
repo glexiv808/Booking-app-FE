@@ -131,7 +131,7 @@ const LoginForm = () => {
 
         <Button
           type="submit"
-          className="!mt-8 w-full h-11 bg-[#ED1B2F] hover:bg-[#c83333] text-[16px]"
+          className="!mt-8 w-full h-11 bg-[green] hover:bg-[#006400] text-[16px]"
         >
           Đăng nhập bằng Email
         </Button>
