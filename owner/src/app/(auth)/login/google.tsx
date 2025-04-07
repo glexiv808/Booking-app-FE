@@ -28,7 +28,7 @@ export default function Google({
       className={
         disable
           ? "w-full h-11 border-[#a6a6a6] text-[#a6a6a6] font-semibold text-[16px]  pointer-events-none select-none"
-          : "w-full h-11 border-[#ed1b2f] text-[#ed1b2f] font-semibold text-[16px] hover:bg-[#fff5f5] hover:text-[#ed1b2f] select-none "
+          : "w-full h-11 border-[green] text-[#green] font-semibold text-[16px] hover:bg-[#90FB90] hover:text-[#green] select-none "
       }
       variant="outline"
       onClick={handleLoginGoogle}

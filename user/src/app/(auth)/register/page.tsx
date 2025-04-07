@@ -13,7 +13,7 @@ export default function RegisterPage() {
   return (
     <div className="flex w-full justify-center text-[#121212] bg-cover"
         style={{
-        backgroundImage: "url('/the-thao.jpg?height=1080&width=1920')",
+        backgroundImage: "url('/image.png?height=1080&width=1920')",
       }}
     >
       <div className="absolute inset-0 bg-teal-500/30 backdrop-blur-sm h-full"></div>
