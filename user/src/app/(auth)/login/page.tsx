@@ -9,14 +9,15 @@ export default function LoginPage() {
   return (
     <div className="flex w-full justify-center text-[#121212] bg-cover "
       style={{
-        backgroundImage: "url('/the-thao.jpg?height=1080&width=1920')",
+        backgroundImage: "url('/image.png?height=1080&width=1920')",
       }}>
       <div className="absolute inset-0 bg-teal-500/30 backdrop-blur-sm"></div>
       
       <div className="max-w-[600px] w-full h-screen flex justify-center items-center">
         <div className="w-full max-w-md p-8 rounded-lg bg-sky-50/90 shadow-lg relative z-10">
-          <div className="flex items-center my-6">
-            <h3 className="text-xl font-bold">Chào mừng bạn đến với AE booking</h3>
+        <div className=" items-center my-6">
+            <h3 className="text-xl font-bold">Đăng nhập - Khách</h3><br/>
+            <h3 className="text-m font-bold">Chào mừng bạn đến với AE booking</h3>
           </div>
           <div className="flex justify-between w-full gap-[10%] ">
             <div className="flex-[4_4_0%]">
@@ -42,7 +43,7 @@ export default function LoginPage() {
               <div className="flex justify-center my-4">
                 
                 <Link
-                  href="/owner/src/app/(auth)/login"
+                  href="http://localhost:3003/login"
                   className="text-[#0e2eed] hover:text-[#192fb5]"
                 >
                   Nếu bạn là chủ sân, bấm vào đây để đăng nhập?&nbsp;
