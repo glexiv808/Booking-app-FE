@@ -22,23 +22,14 @@ export default function RegisterPage() {
           <div className="w-full max-w-md p-8 rounded-lg bg-sky-50/90 shadow-lg relative z-10">
             <div className="flex items-center my-6">
               <h3 className="text-xl font-bold">Chào mừng bạn đến với AE booking</h3>
-              {/* <Image
-                className="pl-2"
-                src={"/logo_black.png"}
-                width={80}
-                height={30}
-                alt="Logo"
-              /> */}
             </div>
             <div className="flex justify-between w-full gap-[10%] ">
               <div className="flex-[4_4_0%]">
-                <div className="text-3xl font-bold">Đăng ký tài khoản</div>
-                <TermsGoogle/>
-                {/* <Google title={"Đăng ký bằng Google"} /> */}
+                <div className="text-2xl font-bold">Đăng ký tài khoản - Chủ sân</div>
                 <div className="relative flex items-center py-4">
                   <Separator className="absolute" />
                   <div className="relative flex w-full  justify-center  ">
-                    <span className="px-3 text-sm">hoặc</span>
+
                   </div>
                 </div>
                 <RegisterForm />

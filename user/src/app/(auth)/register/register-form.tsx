@@ -147,7 +147,7 @@ const RegisterForm = () => {
           type="submit"
           className={"!mt-8 w-full h-11 bg-[green] hover:bg-[#006400] text-[16px]"}
         >
-          Đăng ký bằng Email
+          Đăng ký
         </Button>
       </form>
     </Form>

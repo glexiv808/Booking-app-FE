@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import Google from "@/app/(auth)/login/google";
 
 export default function LoginPage() {
+  const UrlUser = process.env.NEXT_PUBLIC_USER_URL
   return (
     <div className="flex w-full justify-center text-[#121212] bg-cover "
       style={{
@@ -21,29 +22,11 @@ export default function LoginPage() {
           </div>
           <div className="flex justify-between w-full gap-[10%] ">
             <div className="flex-[4_4_0%]">
-              <div className="mb-4 text-[#414042] text-sm font-normal">
-                Bằng việc đăng nhập, bạn đồng ý với các{" "}
-                <Link href={"#"} className="text-[#0e2eed]">
-                  Điều khoản dịch vụ
-                </Link>{" "}
-                và{" "}
-                <Link href={"#"} className="text-[#0e2eed]">
-                  Chính sách quyền riêng tư
-                </Link>{" "}
-                của AE booking liên quan đến thông tin riêng tư của bạn.
-              </div>
-              <Google title={"Đăng nhập bằng Google"}/>
-              <div className="relative flex items-center py-4">
-                <Separator className="absolute" />
-                <div className="relative flex w-full  justify-center  ">
-                  <span className="px-3 text-sm">hoặc</span>
-                </div>
-              </div>
               <LoginForm />
               <div className="flex justify-center my-4">
                 
                 <Link
-                  href="http://localhost:3002/login"
+                  href={`${UrlUser}/login`}
                   className="text-[#0e2eed] hover:text-[#192fb5]"
                 >
                   Nếu bạn là khách, bấm vào đây để đăng nhập?&nbsp;

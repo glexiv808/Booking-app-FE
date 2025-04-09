@@ -133,7 +133,7 @@ const LoginForm = () => {
           type="submit"
           className="!mt-8 w-full h-11 bg-[green] hover:bg-[#006400] text-[16px]"
         >
-          Đăng nhập bằng Email
+          Đăng nhập
         </Button>
       </form>
     </Form>
