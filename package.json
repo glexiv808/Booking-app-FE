@@ -2,7 +2,7 @@
   "name": "booking_app_fe",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently \"cd admin && npm run dev -- --port 3001\" \"cd user && npm run dev -- --port 3002\" \"cd owner && npm run dev -- --port 3003\""
+    "dev": "concurrently \"cd admin && npm run dev -- --port 3002\" \"cd user && npm run dev -- --port 3000\" \"cd owner && npm run dev -- --port 3001\""
   },
   "devDependencies": {
     "concurrently": "^8.0.0"
