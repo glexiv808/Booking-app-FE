@@ -11,7 +11,7 @@ export default function Venue() {
     const [venues, setVenues] = useState<Venue[]>([])
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/venues')
+        axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/venues`)
             .then((res) => {
                 console.log('API response:', res.data)
                 setVenues(res.data.data ?? res.data)

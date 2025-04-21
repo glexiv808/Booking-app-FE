@@ -8,6 +8,8 @@ import { ArrowLeft, Edit, MapPin, Users, Phone, Calendar, Clock } from 'lucide-r
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Venue } from '@/types/venue';
+import AppSidebar from '@/components/app-sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 
 export default function VenueDetail() {
@@ -19,7 +21,7 @@ export default function VenueDetail() {
     useEffect(() => {
         if (!venueId) return;
 
-        axios.get(`http://localhost:8000/api/venues/detail/${venueId}`)
+        axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/venues/detail/${venueId}`)
             .then((res) => {
                 console.log('Venue detail:', res.data);
                 setVenue(res.data.data); // đúng key là `data`
@@ -32,6 +34,9 @@ export default function VenueDetail() {
     if (!venue) return <div>Đang tải thông tin sân...</div>;
 
     return (
+        <>
+   
+        
         <div className="container mx-auto py-6">
             <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -97,12 +102,36 @@ export default function VenueDetail() {
                         <CardHeader>
                             <CardTitle className="flex items-center text-lg">
                                 <Calendar className="mr-2 h-4 w-4" />
-                                Trạng thái {venue.venue_status}
+                                Thông tin các sân có sân có sẵn {venue.venue_status}
                             </CardTitle>
                         </CardHeader>
+                        <CardContent className="space-y-2">
+                            <div>
+                                <button className="text-sm font-medium">Sân 1</button>
+                                {/* <div className="text-sm text-muted-foreground">{venue.phone_number}</div> */}
+                            </div>
+                            <div>
+                                <button className="text-sm font-medium">Sân 2</button>
+                                {/* <div className="text-sm text-muted-foreground">{venue.phone_number}</div> */}
+                            </div>
+                            <div>
+                                <button className="text-sm font-medium">Sân 3</button>
+                                {/* <div className="text-sm text-muted-foreground">{venue.phone_number}</div> */}
+                            </div>
+                            <div>
+                                <button className="text-sm font-medium">Sân 4</button>
+                                {/* <div className="text-sm text-muted-foreground">{venue.phone_number}</div> */}
+                            </div>
+                            <div>
+                                <button className="text-sm font-medium">Sân 5</button>
+                                {/* <div className="text-sm text-muted-foreground">{venue.phone_number}</div> */}
+                            </div>
+                        </CardContent>
                     </Card>
                 </div>
             </div>
         </div>
+        </>
+
     );
 }

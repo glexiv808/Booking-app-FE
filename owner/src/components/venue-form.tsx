@@ -1,31 +1,19 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, Plus, X } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import type { Venue } from "@/types/venue"
 
 type VenueFormProps = {
-  venue?: {
-    id: string
-    name: string
-    address: string
-    description: string
-    capacity: number
-    contactName: string
-    contactPhone: string
-    contactEmail: string
-    amenities: string[]
-    imageUrl: string
-  }
+  venue?: Venue
 }
 
 export function VenueForm({ venue }: VenueFormProps) {
@@ -33,18 +21,14 @@ export function VenueForm({ venue }: VenueFormProps) {
   const isEditing = !!venue
 
   const [formData, setFormData] = useState({
-    name: venue?.name || "",
-    address: venue?.address || "",
-    description: venue?.description || "",
-    capacity: venue?.capacity || 0,
-    contactName: venue?.contactName || "",
-    contactPhone: venue?.contactPhone || "",
-    contactEmail: venue?.contactEmail || "",
-    amenities: venue?.amenities || ["Âm thanh", "Ánh sáng"],
-    imageUrl: venue?.imageUrl || "/placeholder.svg?height=400&width=800",
+    name: venue?.venue_name || "",
+    address: venue?.venue_address || "",
+    Phone: venue?.phone_number || "",
+    bank_name: venue?.venue_bank_name || "",
+    bank_number: venue?.venue_bank_account_number || "",
+    imageUrl: venue?.venue_bank_account_number || "/placeholder.svg?height=400&width=800",
   })
 
-  const [newAmenity, setNewAmenity] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -57,22 +41,22 @@ export function VenueForm({ venue }: VenueFormProps) {
     setFormData((prev) => ({ ...prev, [name]: Number.parseInt(value) || 0 }))
   }
 
-  const addAmenity = () => {
-    if (newAmenity.trim() && !formData.amenities.includes(newAmenity.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        amenities: [...prev.amenities, newAmenity.trim()],
-      }))
-      setNewAmenity("")
-    }
-  }
+  // const addAmenity = () => {
+  //   if (newAmenity.trim() && !formData.amenities.includes(newAmenity.trim())) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       amenities: [...prev.amenities, newAmenity.trim()],
+  //     }))
+  //     setNewAmenity("")
+  //   }
+  // }
 
-  const removeAmenity = (amenity: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      amenities: prev.amenities.filter((a) => a !== amenity),
-    }))
-  }
+  // const removeAmenity = (amenity: string) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     amenities: prev.amenities.filter((a) => a !== amenity),
+  //   }))
+  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -82,7 +66,7 @@ export function VenueForm({ venue }: VenueFormProps) {
       if (isEditing && venue) {
         // In a real app, this would call the server action
         // await updateVenue(venue.id, formData)
-        console.log("Updating venue:", venue.id, formData)
+        console.log("Updating venue:", venue.venue_id, formData)
       } else {
         // In a real app, this would call the server action
         // await createVenue(formData)
@@ -102,7 +86,7 @@ export function VenueForm({ venue }: VenueFormProps) {
     <form onSubmit={handleSubmit}>
       <div className="grid gap-6">
         <div className="flex items-center gap-2">
-          <Link href={isEditing ? `/venues/${venue.id}` : "/"}>
+          <Link href={isEditing ? `/venue/${venue.venue_id}` : "/"}>
             <Button type="button" variant="outline" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -126,7 +110,7 @@ export function VenueForm({ venue }: VenueFormProps) {
                 <Input id="address" name="address" value={formData.address} onChange={handleChange} required />
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="description">Giờ hoạt động</Label>
                 <Textarea
                   id="description"
@@ -135,7 +119,7 @@ export function VenueForm({ venue }: VenueFormProps) {
                   onChange={handleChange}
                   rows={4}
                 />
-              </div>
+              </div> */}
             </CardContent>
           </Card>
 
@@ -146,15 +130,17 @@ export function VenueForm({ venue }: VenueFormProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="contactName">Người liên hệ</Label>
-                  <Input id="contactName" name="contactName" value={formData.contactName} onChange={handleChange} />
-                </div>
-
-                <div className="space-y-2">
                   <Label htmlFor="contactPhone">Số điện thoại</Label>
-                  <Input id="contactPhone" name="contactPhone" value={formData.contactPhone} onChange={handleChange} />
+                  <Input id="contactPhone" name="contactPhone" value={formData.Phone} onChange={handleChange} />
                 </div>
-
+                <div className="space-y-2">
+                  <Label htmlFor="contactPhone">Số tài khoản</Label>
+                  <Input id="contactPhone" name="contactPhone" value={formData.bank_number} onChange={handleChange} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="contactPhone">Tên ngân hàng</Label>
+                  <Input id="contactPhone" name="contactPhone" value={formData.bank_name} onChange={handleChange} />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -184,7 +170,7 @@ export function VenueForm({ venue }: VenueFormProps) {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between border-t px-6 py-4">
-            <Link href={isEditing ? `/venues/${venue.id}` : "/"}>
+            <Link href={isEditing ? `/venue/${venue.venue_id}` : "/"}>
               <Button type="button" variant="outline">
                 Hủy
               </Button>
