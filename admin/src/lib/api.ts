@@ -1,9 +1,7 @@
 import type { SportType } from "@/types/sport-type"
 
-// API base URL - replace with your Laravel API URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
 
-// Define possible response types
 interface ApiResponse {
   data?: SportType[] | SportType
   sportTypes?: SportType[]
@@ -20,24 +18,19 @@ async function handleResponse(response: Response) {
 
   const responseData: ApiResponse = await response.json()
 
-  // Log the response for debugging
+
   console.log("API response data:", responseData)
 
-  // Handle different response formats
+
   if (Array.isArray(responseData)) {
-    // If the response is already an array, return it
     return responseData as SportType[]
   } else if (responseData.data && Array.isArray(responseData.data)) {
-    // If response has a data property that's an array
     return responseData.data as SportType[]
   } else if (responseData.sportTypes && Array.isArray(responseData.sportTypes)) {
-    // If response has a sportTypes property that's an array
     return responseData.sportTypes as SportType[]
   } else if (responseData.data && !Array.isArray(responseData.data)) {
-    // If response has a data property that's a single object
     return responseData.data as SportType
   } else {
-    // If none of the above, return the response as is
     return responseData as any
   }
 }
@@ -53,7 +46,6 @@ export async function fetchSportTypes(): Promise<SportType[]> {
   })
 
   const result = await handleResponse(response)
-  // Ensure we always return an array
   return Array.isArray(result) ? result : [result].filter(Boolean)
 }
 

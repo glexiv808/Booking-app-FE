@@ -120,7 +120,6 @@ export function SportTypeTable({ searchQuery, onEdit, onSuccess }: SportTypeTabl
     )
   }
 
-  // Ensure filteredSportTypes is an array before rendering
   const sportTypesToRender = Array.isArray(filteredSportTypes) ? filteredSportTypes : []
 
   return (
