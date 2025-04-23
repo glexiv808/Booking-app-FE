@@ -11,22 +11,23 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { Venue } from "@/types/venue"
+import { getAccessTokenFormLocalStorage } from "@/lib/utils"
 
 type VenueFormProps = {
   venue?: Venue
 }
-
+const token = getAccessTokenFormLocalStorage();
 export function VenueForm({ venue }: VenueFormProps) {
   const router = useRouter()
   const isEditing = !!venue
 
   const [formData, setFormData] = useState({
-    name: venue?.venue_name || "",
-    address: venue?.venue_address || "",
+    name: venue?.name || "",
+    address: venue?.address || "",
     Phone: venue?.phone_number || "",
-    bank_name: venue?.venue_bank_name || "",
-    bank_number: venue?.venue_bank_account_number || "",
-    imageUrl: venue?.venue_bank_account_number || "/placeholder.svg?height=400&width=800",
+    bank_name: venue?.bank_name || "",
+    bank_number: venue?.bank_account_number || "",
+    imageUrl: venue?.bank_account_number || "",
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,38 +42,43 @@ export function VenueForm({ venue }: VenueFormProps) {
     setFormData((prev) => ({ ...prev, [name]: Number.parseInt(value) || 0 }))
   }
 
-  // const addAmenity = () => {
-  //   if (newAmenity.trim() && !formData.amenities.includes(newAmenity.trim())) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       amenities: [...prev.amenities, newAmenity.trim()],
-  //     }))
-  //     setNewAmenity("")
-  //   }
-  // }
-
-  // const removeAmenity = (amenity: string) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     amenities: prev.amenities.filter((a) => a !== amenity),
-  //   }))
-  // }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    try {
+    try {   
       if (isEditing && venue) {
-        // In a real app, this would call the server action
-        // await updateVenue(venue.id, formData)
-        console.log("Updating venue:", venue.venue_id, formData)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/venues/${venue.venue_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+          credentials: "include"
+        })
+    
+        if (!response.ok) {
+          throw new Error("Failed to update venue")
+        }
+    
+        console.log("Updated venue:", venue.venue_id)
       } else {
-        // In a real app, this would call the server action
-        // await createVenue(formData)
-        console.log("Creating venue:", formData)
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/venues`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+    
+        if (!response.ok) {
+          throw new Error("Failed to create venue")
+        }
+    
+        console.log("Created venue")
       }
-
+    
       // Navigate back to the venues list
       router.push("/")
     } catch (error) {
@@ -109,17 +115,6 @@ export function VenueForm({ venue }: VenueFormProps) {
                 <Label htmlFor="address">Địa chỉ</Label>
                 <Input id="address" name="address" value={formData.address} onChange={handleChange} required />
               </div>
-
-              {/* <div className="space-y-2">
-                <Label htmlFor="description">Giờ hoạt động</Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  rows={4}
-                />
-              </div> */}
             </CardContent>
           </Card>
 
@@ -134,12 +129,12 @@ export function VenueForm({ venue }: VenueFormProps) {
                   <Input id="contactPhone" name="contactPhone" value={formData.Phone} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contactPhone">Số tài khoản</Label>
-                  <Input id="contactPhone" name="contactPhone" value={formData.bank_number} onChange={handleChange} />
+                  <Label htmlFor="bankNumber">Số tài khoản</Label>
+                  <Input id="bankNumber" name="bankNumber" value={formData.bank_number} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="contactPhone">Tên ngân hàng</Label>
-                  <Input id="contactPhone" name="contactPhone" value={formData.bank_name} onChange={handleChange} />
+                  <Label htmlFor="bankName">Tên ngân hàng</Label>
+                  <Input id="bankName" name="bankName" value={formData.bank_name} onChange={handleChange} />
                 </div>
               </CardContent>
             </Card>

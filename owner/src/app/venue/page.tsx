@@ -1,33 +1,18 @@
-'use client'
+import { VenueDetails } from "@/components/venue-details"
+import { DashboardHeader } from "@/components/venue-header"
+import { EmptyState } from "@/components/empty-state"
 
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import  AppSidebar  from "@/components/app-sidebar"
-import type { Venue } from '@/types/venue';
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: { venueId?: string }
+}) {
+  const { venueId } = searchParams
 
-
-export default function Venue() {
-    const [venues, setVenues] = useState<Venue[]>([])
-
-    useEffect(() => {
-        axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/venues`)
-            .then((res) => {
-                console.log('API response:', res.data)
-                setVenues(res.data.data ?? res.data)
-            })
-            .catch(err => console.error(err))
-    }, [])
-
-    return (
-        <>
-        <SidebarProvider >
-             <AppSidebar venues={venues} />
-            <main>
-                <SidebarTrigger />
-                {/* {children} */}
-            </main>
-        </SidebarProvider>
-        </>
-    )
+  return (
+    <div className="flex flex-col h-full">
+      <DashboardHeader />
+      <div className="flex-1 p-6">{venueId ? <VenueDetails venueId={venueId} /> : <EmptyState />}</div>
+    </div>
+  )
 }

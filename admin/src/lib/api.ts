@@ -1,6 +1,8 @@
 import type { SportType } from "@/types/sport-type"
+import { getAccessTokenFormLocalStorage } from "./utils"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
+const token = getAccessTokenFormLocalStorage();
 
 interface ApiResponse {
   data?: SportType[] | SportType
@@ -69,6 +71,7 @@ export async function createSportType(data: { name: string; description?: string
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
@@ -83,6 +86,7 @@ export async function updateSportType(id: number, data: { name: string; descript
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
@@ -97,6 +101,7 @@ export async function deleteSportType(id: number): Promise<void> {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
 
