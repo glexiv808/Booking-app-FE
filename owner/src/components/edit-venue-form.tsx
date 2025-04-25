@@ -155,7 +155,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
+                    <SelectItem value="lock">Lock</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                   </SelectContent>
                 </Select>
@@ -196,7 +196,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
               </div>
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
+            {/* <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="opening" className="text-right">
                 Opening Time
               </Label>
@@ -228,7 +228,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
                 />
                 {errors.closing && <p className="text-sm text-destructive mt-1">{errors.closing}</p>}
               </div>
-            </div>
+            </div> */}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>

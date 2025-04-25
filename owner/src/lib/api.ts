@@ -3,7 +3,6 @@ import { getAccessTokenFormLocalStorage } from "./utils";
 
 
 const token = getAccessTokenFormLocalStorage();
-// API base URL from environment variable
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
 
 // Helper function to handle API responses
@@ -28,6 +27,7 @@ export async function fetchVenues(): Promise<Venue[]> {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        // Authorization: `Bearer ${token}`
       },
     })
 
