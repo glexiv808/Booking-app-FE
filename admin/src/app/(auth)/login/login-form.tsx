@@ -59,7 +59,7 @@ const LoginForm = () => {
 
         setImage(user.image);
         setName(user.name);
-        router.push("/");
+        router.push("/sporttype");
       }
     } else {
       toast({

@@ -3,9 +3,11 @@ import { SportTypeManagement } from "@/components/sport-type-management"
 import { Skeleton } from "@/components/ui/skeleton"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DashboardLayout } from "@/components/dashboard-layout"
 
 export default function HomePage() {
   return (
+    <DashboardLayout>
     <div className="flex flex-col gap-6">
       <DashboardHeader heading="Quản Lý Loại Thể Thao" text="Xem và quản lý tất cả các loại thể thao trong hệ thống." />
       <Card>
@@ -19,6 +21,7 @@ export default function HomePage() {
         </CardContent>
       </Card>
     </div>
+    </DashboardLayout>
   )
 }
 

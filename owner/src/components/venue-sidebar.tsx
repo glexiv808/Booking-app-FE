@@ -19,10 +19,11 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
-import { fetchVenues, logout } from "@/lib/api"
+import { fetchVenues } from "@/lib/api"
 import type { Venue } from "@/types/venue"
 import { AddVenueForm } from "./add-venue-form"
 import { toast } from "@/components/ui/use-toast"
+import authApiRequest from "@/apiRequests/auth"
 
 export function DashboardSidebar() {
   const router = useRouter()
@@ -62,22 +63,9 @@ export function DashboardSidebar() {
     router.push(`/venue?venueId=${venueId}`)
   }
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true)
-    try {
-      await logout()
-      router.push("/login")
-    } catch (error) {
-      console.error("Logout failed:", error)
-      toast({
-        title: "Error",
-        description: "Failed to logout. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoggingOut(false)
-    }
-  }
+  const logout = () => {
+    authApiRequest.logout();
+  };
 
   const handleVenueAdded = () => {
     // Reload venues after adding a new one
@@ -137,7 +125,7 @@ export function DashboardSidebar() {
               <Plus className="mr-2 h-4 w-4" />
               Add New Venue
             </Button>
-            <Button variant="outline" className="w-full" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
+            <Button variant="outline" className="w-full" size="sm" onClick={logout} disabled={isLoggingOut}>
               {isLoggingOut ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

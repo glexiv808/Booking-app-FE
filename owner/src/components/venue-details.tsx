@@ -131,8 +131,8 @@ export function VenueDetails({ venueId }: { venueId: string }) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                {/* <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Contact Information</CardTitle>
                   </CardHeader>
@@ -142,7 +142,7 @@ export function VenueDetails({ venueId }: { venueId: string }) {
                       <span>{venue.phone_number}</span>
                     </div>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 <Card>
                   <CardHeader>
@@ -178,7 +178,7 @@ export function VenueDetails({ venueId }: { venueId: string }) {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
@@ -190,11 +190,11 @@ export function VenueDetails({ venueId }: { venueId: string }) {
                 Manage Staff
               </Button>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
 
-      <Tabs defaultValue="bookings">
+      {/* <Tabs defaultValue="bookings">
         <TabsList>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="facilities">Facilities</TabsTrigger>
@@ -212,7 +212,7 @@ export function VenueDetails({ venueId }: { venueId: string }) {
           <h3 className="text-lg font-medium mb-4">Customer Reviews</h3>
           <div className="text-muted-foreground">No reviews yet for this venue.</div>
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
 
       {/* Edit Venue Modal */}
       <EditVenueForm

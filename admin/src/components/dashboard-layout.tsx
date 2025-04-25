@@ -8,7 +8,8 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { BarChart3, Home, LayoutDashboard, Menu, PlusCircle, Settings, Trophy, Users } from "lucide-react"
+import { BarChart3, Home, LayoutDashboard, Loader2, LogOut, Menu, PlusCircle, Settings, Trophy, Users } from "lucide-react"
+import authApiRequest from "@/apiRequests/auth"
 
 interface NavProps {
   isCollapsed: boolean
@@ -21,6 +22,9 @@ interface NavProps {
   }[]
 }
 
+const logout = () => {
+  authApiRequest.logout();
+};
 export function Nav({ links, isCollapsed }: NavProps) {
   const pathname = usePathname()
 
@@ -75,8 +79,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <span className="hidden md:inline-block">AE booking - Admin</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="ml-auto h-8 gap-1">
-              <span className="hidden sm:inline-block">Logout</span>
+            <Button variant="outline" className="w-full" size="sm" onClick={logout} >
+              <>
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </>
             </Button>
           </div>
         </div>
