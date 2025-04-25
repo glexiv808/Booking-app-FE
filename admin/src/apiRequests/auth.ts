@@ -15,8 +15,8 @@ const authApiRequest = {
     http.post<IBackendRes<LoginResType>>("/login", body),
 
   login: (body: LoginBodyType) =>
-    http.post<IBackendRes<LoginResType>>("login", body, {
-      baseUrl: `${process.env.NEXT_PUBLIC_API_ENDPOINT}`,
+    http.post<IBackendRes<LoginResType>>("/api/auth/login", body, {
+      baseUrl: "",
     }),
 
   sVerifyRegister: (code: string) =>
@@ -31,10 +31,10 @@ const authApiRequest = {
 
   logout: () =>
     http.post<IBackendRes<any>>(
-      "/logout",
+      "/api/auth/logout",
       {},
       {
-        baseUrl: `${process.env.NEXT_PUBLIC_API_ENDPOINT}`,
+        baseUrl: "",
       }
     ),
 

@@ -89,7 +89,7 @@ const request = async <Response>(
 
   const baseUrl =
     options?.baseUrl === undefined
-      ? "http://localhost:8000/api"
+      ? "http://127.0.0.1:8000/api"
       : options.baseUrl;
 
   const fullUrl = `${baseUrl}/${normalizePath(url)}`;

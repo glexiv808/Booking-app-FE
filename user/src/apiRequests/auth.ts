@@ -12,9 +12,7 @@ const authApiRequest = {
   }> | null,
 
   sLogin: (body: LoginBodyType) =>
-    http.post<IBackendRes<LoginResType>>("/login", body,  {
-      baseUrl: "http://localhost:8000/api",
-    }),
+    http.post<IBackendRes<LoginResType>>("/login", body),
 
   login: (body: LoginBodyType) =>
     http.post<IBackendRes<LoginResType>>("/api/auth/login", body, {
