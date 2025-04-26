@@ -79,7 +79,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <span className="hidden md:inline-block">AE booking - Admin</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="w-full" size="sm" onClick={logout} >
+            <Button
+              variant="outline"
+              className="w-full hover:bg-primary hover:text-white transition-colors"
+              size="sm"
+              onClick={logout}
+            >
               <>
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout

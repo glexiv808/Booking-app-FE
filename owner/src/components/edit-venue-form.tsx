@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { fetchVenues, updateVenue } from "@/lib/api"
 import type { Venue } from "@/types/venue"
-import { toast } from "@/components/ui/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useUpdateVenueMutation } from "@/queries/useVenue"
 
 interface EditVenueFormProps {
   venue: Venue
@@ -30,14 +29,13 @@ interface EditVenueFormProps {
 
 export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormProps) {
   const [formData, setFormData] = useState<Venue>({ ...venue })
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const updateVenueMutation = useUpdateVenueMutation()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear error for this field when user types
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev }
@@ -50,7 +48,6 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear error for this field when user selects
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev }
@@ -86,26 +83,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
     if (!validateForm()) {
       return
     }
-
-    setIsLoading(true)
-    try {
-      const updatedVenue = await updateVenue(venue.venue_id, formData)
-      toast({
-        title: "Success",
-        description: "Venue updated successfully",
-      })
-      onSave(updatedVenue)
-      fetchVenues()
-    } catch (error) {
-      console.error("Failed to update venue:", error)
-      toast({
-        title: "Error",
-        description: "Failed to update venue. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
+    onSave(formData)
   }
 
   return (
@@ -235,8 +213,8 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
+              <Button type="submit" disabled={updateVenueMutation.isPending}>
+              {updateVenueMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Saving...

@@ -3,9 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -17,10 +15,9 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createVenue } from "@/lib/api"
 import type { Venue } from "@/types/venue"
-import { toast } from "@/components/ui/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useCreateVenueMutation } from "@/queries/useVenue"
 
 interface AddVenueFormProps {
   isOpen: boolean
@@ -29,9 +26,8 @@ interface AddVenueFormProps {
 }
 
 export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const createVenueMutation = useCreateVenueMutation()
 
   const [formData, setFormData] = useState<Omit<Venue, "venue_id">>({
     name: "",
@@ -48,7 +44,6 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear error for this field when user types
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev }
@@ -61,7 +56,6 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
 
-    // Clear error for this field when user selects
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev }
@@ -109,30 +103,15 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
       return
     }
 
-    setIsLoading(true)
-    try {
-      const newVenue = await createVenue(formData)
-      toast({
-        title: "Success",
-        description: "Venue created successfully",
-      })
+    createVenueMutation.mutate(formData, {
+      onSuccess: () => {
 
       if (onSuccess) {
         onSuccess()
-      } else {
-        router.push(`/venue?venueId=${newVenue.venue_id}`)
-        onClose()
       }
-    } catch (error) {
-      console.error("Failed to create venue:", error)
-      toast({
-        title: "Error",
-        description: "Failed to create venue. Please try again.",
-        variant: "destructive",
+        onClose()
+      },
       })
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (
@@ -275,8 +254,8 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
+              <Button type="submit" disabled={createVenueMutation.isPending}>
+              {createVenueMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating...

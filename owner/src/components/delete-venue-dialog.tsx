@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Loader2 } from "lucide-react"
 
 import {
@@ -13,8 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { toast } from "@/components/ui/use-toast"
-import { fetchVenues } from "@/lib/api"
+import { useDeleteVenueMutation } from "@/queries/useVenue"
 
 interface DeleteVenueDialogProps {
   venueName: string
@@ -24,26 +22,12 @@ interface DeleteVenueDialogProps {
 }
 
 export function DeleteVenueDialog({ venueName, isOpen, onClose, onDelete }: DeleteVenueDialogProps) {
-  const [isDeleting, setIsDeleting] = useState(false)
-
+  const deleteVenueMutation = useDeleteVenueMutation()
   const handleDelete = async () => {
-    setIsDeleting(true)
     try {
       await onDelete()
-      toast({
-        title: "Success",
-        description: "Venue deleted successfully",
-      })
     } catch (error) {
       console.error("Error deleting venue:", error)
-      toast({
-        title: "Error",
-        description: "Failed to delete venue. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsDeleting(false)
-      onClose()
     }
   }
 
@@ -58,9 +42,9 @@ export function DeleteVenueDialog({ venueName, isOpen, onClose, onDelete }: Dele
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-          <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? (
+             <AlertDialogCancel disabled={deleteVenueMutation.isPending}>Cancel</AlertDialogCancel>
+          <Button variant="destructive" onClick={handleDelete} disabled={deleteVenueMutation.isPending}>
+            {deleteVenueMutation.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Deleting...
