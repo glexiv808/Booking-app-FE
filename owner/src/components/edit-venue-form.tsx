@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { updateVenue } from "@/lib/api"
+import { fetchVenues, updateVenue } from "@/lib/api"
 import type { Venue } from "@/types/venue"
 import { toast } from "@/components/ui/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -95,6 +95,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
         description: "Venue updated successfully",
       })
       onSave(updatedVenue)
+      fetchVenues()
     } catch (error) {
       console.error("Failed to update venue:", error)
       toast({

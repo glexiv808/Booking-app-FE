@@ -4,8 +4,17 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export default function HomePage() {
+  const cookieStore = cookies()
+  const accessToken = cookieStore.get("accessToken")?.value
+
+  if (!accessToken) {
+    redirect("/login")
+  }
+
   return (
     <DashboardLayout>
     <div className="flex flex-col gap-6">

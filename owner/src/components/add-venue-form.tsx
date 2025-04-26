@@ -40,8 +40,8 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
     bank_account_number: "",
     bank_name: "",
     phone_number: "",
-    opening: "",
-    closing: "",
+    longitude: "",
+    latitude: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,12 +90,12 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
       newErrors.phone_number = "Phone number is required"
     }
 
-    if (!formData.opening.trim()) {
-      newErrors.opening = "Opening time is required"
+    if (!formData.longitude.trim()) {
+      newErrors.longitude = "Longitude time is required"
     }
 
-    if (!formData.closing.trim()) {
-      newErrors.closing = "Closing time is required"
+    if (!formData.latitude.trim()) {
+      newErrors.latitude = "latitude time is required"
     }
 
     setErrors(newErrors)
@@ -183,8 +183,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="inactive">Locked</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -241,36 +240,34 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="opening" className="text-right">
-                Opening Time
+              <Label htmlFor="longitude" className="text-right">
+                Longitude
               </Label>
               <div className="col-span-3">
                 <Input
-                  id="opening"
-                  name="opening"
-                  type="time"
-                  value={formData.opening}
+                  id="longitude"
+                  name="longitude"
+                  value={formData.longitude}
                   onChange={handleChange}
-                  className={errors.opening ? "border-destructive" : ""}
+                  className={errors.longitude ? "border-destructive" : ""}
                 />
-                {errors.opening && <p className="text-sm text-destructive mt-1">{errors.opening}</p>}
+                {errors.longitude && <p className="text-sm text-destructive mt-1">{errors.longitude}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="closing" className="text-right">
-                Closing Time
+                Latitude:
               </Label>
               <div className="col-span-3">
                 <Input
-                  id="closing"
-                  name="closing"
-                  type="time"
-                  value={formData.closing}
+                  id="latitude"
+                  name="latitude"
+                  value={formData.latitude}
                   onChange={handleChange}
-                  className={errors.closing ? "border-destructive" : ""}
+                  className={errors.latitude ? "border-destructive" : ""}
                 />
-                {errors.closing && <p className="text-sm text-destructive mt-1">{errors.closing}</p>}
+                {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
               </div>
             </div>
           </div>

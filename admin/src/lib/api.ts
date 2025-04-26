@@ -7,7 +7,7 @@ const token = getAccessTokenFormLocalStorage();
 interface ApiResponse {
   data?: SportType[] | SportType
   sportTypes?: SportType[]
-  [key: string]: any // Allow for other properties
+  [key: string]: any
 }
 
 // Helper function to handle API responses

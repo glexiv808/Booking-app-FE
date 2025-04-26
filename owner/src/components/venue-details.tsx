@@ -6,8 +6,7 @@ import { Clock, Edit, MapPin, Phone, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { deleteVenue, fetchVenueById } from "@/lib/api"
+import { deleteVenue, fetchVenueById} from "@/lib/api"
 import type { Venue, } from "@/types/venue"
 import { EditVenueForm } from "./edit-venue-form"
 import { DeleteVenueDialog } from "./delete-venue-dialog"
@@ -41,7 +40,7 @@ export function VenueDetails({ venueId }: { venueId: string }) {
   useEffect(() => {
     loadVenue()
   }, [venueId])
-
+  
   const handleVenueUpdate = (updatedVenue: Venue) => {
     setVenue(updatedVenue)
     setShowEditModal(false)
@@ -54,22 +53,10 @@ export function VenueDetails({ venueId }: { venueId: string }) {
       loadVenue()
     } catch (error) {
       console.error("Failed to delete venue:", error)
-      throw error // Let the DeleteVenueDialog component handle the error
+      throw error
     }
   }
 
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500"
-      case "inactive":
-        return "bg-red-500"
-      case "pending":
-        return "bg-yellow-500"
-      default:
-        return "bg-gray-500"
-    }
-  }
 
   if (isLoading) {
     return (
@@ -131,19 +118,26 @@ export function VenueDetails({ venueId }: { venueId: string }) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-                {/* <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Contact Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span>{venue.phone_number}</span>
-                    </div>
-                  </CardContent>
-                </Card> */}
+              <div className="space-y-8">
+                <div className="aspect-video max-h-[300px] overflow-hidden rounded-md border">
+                  <img
+                    // src={formData.imageUrl || "/placeholder.svg"}
+                    alt="Venue preview"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
 
+                <div className="space-y-2">
+                  {/* <Label htmlFor="imageUrl">URL hình ảnh</Label>
+                <Input id="imageUrl" name="imageUrl" value={formData.imageUrl} onChange={handleChange} /> */}
+                  <p className="text-xs text-muted-foreground">
+                    Nhập URL hình ảnh hoặc để trống để sử dụng hình ảnh mặc định
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Banking Details</CardTitle>
@@ -166,53 +160,18 @@ export function VenueDetails({ venueId }: { venueId: string }) {
         <div className="md:w-1/3 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Operating Hours</CardTitle>
+              <CardTitle>Location</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-muted-foreground" />
                 <span>
-                  {venue.opening} - {venue.closing}
+                  {venue.longitude} - {venue.latitude}
                 </span>
               </div>
             </CardContent>
           </Card>
-
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button className="w-full" variant="outline" size="sm">
-                View Bookings
-              </Button>
-              <Button className="w-full" variant="outline" size="sm">
-                Manage Staff
-              </Button>
-            </CardContent>
-          </Card> */}
         </div>
       </div>
-
-      {/* <Tabs defaultValue="bookings">
-        <TabsList>
-          <TabsTrigger value="bookings">Bookings</TabsTrigger>
-          <TabsTrigger value="facilities">Facilities</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews</TabsTrigger>
-        </TabsList>
-        <TabsContent value="bookings" className="p-4 border rounded-md mt-2">
-          <h3 className="text-lg font-medium mb-4">Upcoming Bookings</h3>
-          <div className="text-muted-foreground">No upcoming bookings for this venue.</div>
-        </TabsContent>
-        <TabsContent value="facilities" className="p-4 border rounded-md mt-2">
-          <h3 className="text-lg font-medium mb-4">Available Facilities</h3>
-          <div className="text-muted-foreground">No facilities listed for this venue.</div>
-        </TabsContent>
-        <TabsContent value="reviews" className="p-4 border rounded-md mt-2">
-          <h3 className="text-lg font-medium mb-4">Customer Reviews</h3>
-          <div className="text-muted-foreground">No reviews yet for this venue.</div>
-        </TabsContent>
-      </Tabs> */}
 
       {/* Edit Venue Modal */}
       <EditVenueForm

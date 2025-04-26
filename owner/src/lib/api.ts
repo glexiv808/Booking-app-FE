@@ -1,7 +1,6 @@
 import type { Venue } from "@/types/venue"
 import { getAccessTokenFormLocalStorage } from "./utils";
 
-
 const token = getAccessTokenFormLocalStorage();
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
 
@@ -33,8 +32,6 @@ export async function fetchVenues(): Promise<Venue[]> {
 
     const data = await handleResponse(response)
 
-    // Laravel typically returns data in a 'data' property
-    // Adjust this based on your API's response structure
     return Array.isArray(data.data) ? data.data : data
   } catch (error) {
     console.error("Error fetching venues:", error)
@@ -90,9 +87,8 @@ export async function createVenue(venueData: Omit<Venue, "venue_id">): Promise<V
 // Function to update a venue
 export async function updateVenue(id: string, venueData: Partial<Venue>): Promise<Venue> {
   try {
-    // Laravel typically uses PUT for full updates and PATCH for partial updates
     const response = await fetch(`${API_BASE_URL}/venues/${id}`, {
-      method: "PUT", // or "PATCH" depending on your API
+      method: "PUT", 
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

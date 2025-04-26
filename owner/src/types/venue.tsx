@@ -6,6 +6,6 @@ export interface Venue {
     bank_account_number: string;
     bank_name:string;
     phone_number: string;
-    opening: string;
-    closing: string;
+    longitude:string,
+    latitude: string,
 };
