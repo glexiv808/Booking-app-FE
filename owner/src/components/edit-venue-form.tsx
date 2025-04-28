@@ -30,6 +30,7 @@ interface EditVenueFormProps {
 export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormProps) {
   const [formData, setFormData] = useState<Venue>({ ...venue })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [originalFormData] = useState<Venue>({ ...venue });
   const updateVenueMutation = useUpdateVenueMutation()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +214,7 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-              <Button type="submit" disabled={updateVenueMutation.isPending}>
+            <Button type="submit" onClick={handleDelete} disabled={updateVenueMutation.isPending}>
               {updateVenueMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
