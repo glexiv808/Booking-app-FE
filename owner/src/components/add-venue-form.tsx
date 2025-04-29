@@ -15,9 +15,11 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { Venue } from "@/types/venue"
+import type { Venue, VenueImg } from "@/types/venue"
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCreateVenueMutation } from "@/queries/useVenue"
+import UploadPage from "@/app/venue/venue_img/page"
 
 interface AddVenueFormProps {
   isOpen: boolean
@@ -38,6 +40,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
     phone_number: "",
     longitude: "",
     latitude: "",
+    // image:"",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,6 +249,22 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
                   onChange={handleChange}
                   className={errors.latitude ? "border-destructive" : ""}
                 />
+                {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="closing" className="text-right">
+                Image:
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  id="image"
+                  name="image"
+                  value={formData.latitude}
+                  onChange={handleChange}
+                  className={errors.latitude ? "border-destructive" : ""}
+                />
+                     <UploadPage />
                 {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
               </div>
             </div>

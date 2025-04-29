@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,22 +16,28 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { Venue } from "@/types/venue"
+import type { Venue, VenueImg } from "@/types/venue"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useUpdateVenueMutation } from "@/queries/useVenue"
+import { useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue"
+import UploadPage from "@/app/venue/venue_img/page"
+import { deleteVenueImgById } from "@/lib/api"
+
 
 interface EditVenueFormProps {
   venue: Venue
+  venueImgs: VenueImg[]
   isOpen: boolean
   onClose: () => void
   onSave: (venue: Venue) => void
 }
 
-export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormProps) {
+export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: EditVenueFormProps) {
   const [formData, setFormData] = useState<Venue>({ ...venue })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [originalFormData] = useState<Venue>({ ...venue });
   const updateVenueMutation = useUpdateVenueMutation()
+  const [venueImages, setVenueImages] = useState<VenueImg[]>([]);
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -77,6 +83,21 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
+
+  const handleDelete = () => {
+    const imagesToDelete = venueImages.filter((img) => img.markedForDeletion);
+    imagesToDelete.forEach((img) => {
+      deleteVenueImgById(img.image_id);
+    });
+  };
+
+  const handleMarkDeleteExistingImage = (imageId: string) => {
+    // Đánh dấu ID đã bị xóa mềm
+    setDeletedImageIds((prev) => [...prev, imageId]);
+    
+    // Ẩn luôn ảnh khỏi giao diện
+    setVenueImages((prev) => prev.filter((img) => img.image_id !== imageId));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -176,42 +197,52 @@ export function EditVenueForm({ venue, isOpen, onClose, onSave }: EditVenueFormP
               </div>
             </div>
 
-            {/* <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="opening" className="text-right">
-                Opening Time
+            <div className="grid grid-cols-1 items-center gap-4">
+              <Label htmlFor="closing" className="text-right">
+                Image:
               </Label>
+              {/* Existing Images Preview */}
+              {venueImgs.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium mb-2">Existing Images</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    {venueImgs.map((image) => (
+                      <div key={image.image_id} className="relative h-32 border rounded-md overflow-hidden">
+                        <img
+                          src={image.image_url || "/placeholder.svg"}
+                          alt="Venue preview"
+                          className="object-cover w-full h-full"
+                        />
+                        <div className="absolute top-1 left-1 bg-black/70 text-white px-2 py-0.5 text-xs rounded">
+                          {image.type}
+                        </div>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-1 right-1 h-6 w-6 p-0"
+                          onClick={() => handleMarkDeleteExistingImage(image.image_id)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+
               <div className="col-span-3">
-                <Input
-                  id="opening"
-                  name="opening"
-                  type="time"
-                  value={formData.opening}
-                  onChange={handleChange}
-                  className={errors.opening ? "border-destructive" : ""}
-                />
-                {errors.opening && <p className="text-sm text-destructive mt-1">{errors.opening}</p>}
+                <UploadPage />
+                {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
               </div>
             </div>
-
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="closing" className="text-right">
-                Closing Time
-              </Label>
-              <div className="col-span-3">
-                <Input
-                  id="closing"
-                  name="closing"
-                  type="time"
-                  value={formData.closing}
-                  onChange={handleChange}
-                  className={errors.closing ? "border-destructive" : ""}
-                />
-                {errors.closing && <p className="text-sm text-destructive mt-1">{errors.closing}</p>}
-              </div>
-            </div> */}
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={() => {
+              setFormData({ ...originalFormData });
+              onClose();
+            }}>
               Cancel
             </Button>
             <Button type="submit" onClick={handleDelete} disabled={updateVenueMutation.isPending}>

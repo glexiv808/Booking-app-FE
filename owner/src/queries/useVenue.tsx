@@ -1,8 +1,8 @@
 "use client"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue } from "@/lib/api"
-import type { Venue } from "@/types/venue"
+import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue, fetchVenueImgById, deleteVenueImgById } from "@/lib/api"
+import type { Venue, VenueImg } from "@/types/venue"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
 
@@ -29,6 +29,14 @@ export const useVenue = (id: string) => {
   })
 }
 
+export function useVenueImg(venueId: string) {
+  return useQuery<VenueImg[]>({
+    queryKey: ['venueImg', venueId],
+    queryFn: () => fetchVenueImgById(venueId),
+    enabled: !!venueId,
+  });
+}
+
 // Hook to create a venue
 export const useCreateVenueMutation = () => {
   const queryClient = useQueryClient()
@@ -46,7 +54,6 @@ export const useCreateVenueMutation = () => {
       })
 
       // Navigate to the new venue
-    //   router.push(`/venue?venueId=${newVenue.venue_id}`)
     router.push("/venue")
 
     },
@@ -117,3 +124,33 @@ export const useDeleteVenueMutation = () => {
     },
   })
 }
+
+export const useDeleteVenueImgMutation = () => {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+
+  return useMutation({
+    mutationFn: (id: string) => deleteVenueImgById(id),
+    onSuccess: () => {
+      // Invalidate venues list to trigger refetch
+      queryClient.invalidateQueries({ queryKey: venuesKeys.all })
+
+      toast({
+        title: "Success",
+        description: "Venue deleted successfully",
+      })
+
+      // Navigate back to dashboard
+      router.push("/venue")
+    },
+    onError: (error) => {
+      console.error("Failed to delete venue:", error)
+      toast({
+        title: "Error",
+        description: "Failed to delete venue. Please try again.",
+        variant: "destructive",
+      })
+    },
+  })
+}
+

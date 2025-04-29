@@ -9,3 +9,10 @@ export interface Venue {
     longitude:string,
     latitude: string,
 };
+export interface VenueImg {
+    image_id: string,
+    venue_id: string,
+    image_url: string,
+    type: string,
+    markedForDeletion?: boolean;
+};

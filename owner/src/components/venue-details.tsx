@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Edit, MapPin, Trash2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, Edit, MapPin, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +9,7 @@ import type { Venue } from "@/types/venue"
 import { EditVenueForm } from "./edit-venue-form"
 import { DeleteVenueDialog } from "./delete-venue-dialog"
 import { Badge } from "@/components/ui/badge"
-import { useVenue, useDeleteVenueMutation, useUpdateVenueMutation } from "@/queries/useVenue"
+import { useVenue, useDeleteVenueMutation, useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function VenueDetails({ venueId }: { venueId: string }) {
@@ -17,6 +17,23 @@ export function VenueDetails({ venueId }: { venueId: string }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const { data: venue, isLoading, error } = useVenue(venueId)
+  const { data: venueImg, isLoading: isVenueImgLoading } = useVenueImg(venueId);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const handlePrev = () => {
+    if (!venueImg || venueImg.length === 0) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? venueImg.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    if (!venueImg || venueImg.length === 0) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === venueImg.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   const updateVenueMutation = useUpdateVenueMutation()
   const deleteVenueMutation = useDeleteVenueMutation()
 
@@ -156,20 +173,34 @@ export function VenueDetails({ venueId }: { venueId: string }) {
                 <Card>
                   <CardContent>
                     <div className="space-y-12 pt-6">
-                      <div className="aspect-video max-h-[300px] overflow-hidden rounded-md border">
-                        <img
-                          // src={formData.imageUrl || "/placeholder.svg"}
-                          alt="Venue preview"
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
+                      <div className="relative aspect-video max-h-[300px] overflow-hidden rounded-md border flex items-center justify-center">
+                        {venueImg && venueImg.length > 0 ? (
+                          <>
+                            <img
+                              src={venueImg[currentIndex]?.image_url || ""}
+                              alt="Venue preview"
+                              className="h-full w-full object-cover transition-transform duration-300"
+                            />
 
-                      <div className="space-y-2">
-                        {/* <Label htmlFor="imageUrl">URL hình ảnh</Label>
-                <Input id="imageUrl" name="imageUrl" value={formData.imageUrl} onChange={handleChange} /> */}
-                        <p className="text-xs text-muted-foreground">
-                          Nhập URL hình ảnh hoặc để trống để sử dụng hình ảnh mặc định
-                        </p>
+                            {/* Prev Button */}
+                            <button
+                              onClick={handlePrev}
+                              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-2 shadow hover:bg-white"
+                            >
+                              <ChevronLeft className="h-5 w-5" />
+                            </button>
+
+                            {/* Next Button */}
+                            <button
+                              onClick={handleNext}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 rounded-full p-2 shadow hover:bg-white"
+                            >
+                              <ChevronRight className="h-5 w-5" />
+                            </button>
+                          </>
+                        ) : (
+                          <div className="text-muted-foreground">No images available</div>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -200,8 +231,8 @@ export function VenueDetails({ venueId }: { venueId: string }) {
         venue={venue}
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        onSave={handleVenueUpdate}
-      />
+        onSave={handleVenueUpdate} 
+        venueImgs ={venueImg ?? []}   />
 
       {/* Delete Venue Dialog */}
       <DeleteVenueDialog

@@ -1,4 +1,4 @@
-import type { Venue } from "@/types/venue"
+import type { Venue, VenueImg } from "@/types/venue"
 import { getAccessTokenFormLocalStorage } from "./utils";
 
 const token = getAccessTokenFormLocalStorage();
@@ -125,6 +125,79 @@ export async function deleteVenue(id: string): Promise<{ success: boolean }> {
     return { success: true }
   } catch (error) {
     console.error(`Error deleting venue ${id}:`, error)
+    throw error
+  }
+}
+
+export async function fetchVenueImgById(id: string): Promise<VenueImg[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    // return res.json();
+    const data = await handleResponse(res)
+    return data.data || data
+  } catch (error) {
+    console.error(`Error fetching venue image ${id}:`, error)
+    throw error
+  }
+}
+
+export async function addVenueImgById(id: string, images: string[]): Promise<VenueImg[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const data = await handleResponse(res)
+    return data.data || data
+  } catch (error) {
+    console.error(`Error add venue image ${id}:`, error)
+    throw error
+  }
+}
+
+export async function deleteVenueImgById(id: string): Promise<VenueImg[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const data = await handleResponse(res)
+    return data.data || data
+  } catch (error) {
+    console.error(`Error delete venue image ${id}:`, error)
+    throw error
+  }
+}
+
+export async function updateVenueImgById(id: string): Promise<VenueImg[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const data = await handleResponse(res)
+    return data.data || data
+  } catch (error) {
+    console.error(`Error update venue image ${id}:`, error)
     throw error
   }
 }
