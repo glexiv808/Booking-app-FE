@@ -114,7 +114,9 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Edit Venue</DialogTitle>
-            <DialogDescription>Make changes to the venue information below.</DialogDescription>
+            <DialogDescription>
+              Make changes to the venue information below.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -129,7 +131,9 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   onChange={handleChange}
                   className={errors.name ? "border-destructive" : ""}
                 />
-                {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-sm text-destructive mt-1">{errors.name}</p>
+                )}
               </div>
             </div>
 
@@ -138,7 +142,12 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                 Address
               </Label>
               <div className="col-span-3">
-                <Input id="address" name="address" value={formData.address || ""} onChange={handleChange} />
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address || ""}
+                  onChange={handleChange}
+                />
               </div>
             </div>
 
@@ -175,7 +184,11 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   onChange={handleChange}
                   className={errors.bank_name ? "border-destructive" : ""}
                 />
-                {errors.bank_name && <p className="text-sm text-destructive mt-1">{errors.bank_name}</p>}
+                {errors.bank_name && (
+                  <p className="text-sm text-destructive mt-1">
+                    {errors.bank_name}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -189,10 +202,14 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   name="bank_account_number"
                   value={formData.bank_account_number}
                   onChange={handleChange}
-                  className={errors.bank_account_number ? "border-destructive" : ""}
+                  className={
+                    errors.bank_account_number ? "border-destructive" : ""
+                  }
                 />
                 {errors.bank_account_number && (
-                  <p className="text-sm text-destructive mt-1">{errors.bank_account_number}</p>
+                  <p className="text-sm text-destructive mt-1">
+                    {errors.bank_account_number}
+                  </p>
                 )}
               </div>
             </div>
@@ -259,5 +276,5 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

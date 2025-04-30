@@ -5,20 +5,18 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 import SwipeableFieldTypes from "@/app/maps/components/SwiperTypeSport";
 import { useMapStore } from "@/stores/useMapStore";
+import { useSideBarStore } from "@/stores/useSideBarStore";
 
 export default function NavBar() {
   const router = useRouter();
-  const {
-    fieldTypes,
-    sidebarOpen,
-    setSidebarOpen,
-    setSearchFocused,
-    searchQuery,
-    setSearchQuery,
-  } = useMapStore();
+
+  const setSearchQuery = useMapStore((state) => state.setSearchQuery);
+  const searchQuery = useMapStore((state) => state.searchQuery);
+  const setSearchFocused = useMapStore((state) => state.setSearchFocused);
+  const sidebarOpen = useSideBarStore((state) => state.sidebarOpen);
+  const setSidebarOpen = useSideBarStore((state) => state.setSidebarOpen);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 

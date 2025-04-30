@@ -40,7 +40,6 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
     phone_number: "",
     longitude: "",
     latitude: "",
-    // image:"",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

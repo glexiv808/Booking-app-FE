@@ -54,6 +54,7 @@ export const useCreateVenueMutation = () => {
       })
 
       // Navigate to the new venue
+    //   router.push(`/venue?venueId=${newVenue.venue_id}`)
     router.push("/venue")
 
     },

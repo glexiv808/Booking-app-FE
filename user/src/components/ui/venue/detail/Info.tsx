@@ -1,17 +1,13 @@
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronLeft, Clock, MapPin, Phone } from "lucide-react";
-import { useMapStore } from "@/stores/useMapStore";
+import { Clock, MapPin, Phone } from "lucide-react";
 import { useGetVenueDetail } from "@/queries/useVenue";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { useSideBarStore } from "@/stores/useSideBarStore";
 
 export const InfoDetailVenue = () => {
   const [detailVenue, setDetailVenue] = useState<Venue>();
-  const { venueIdSelected } = useMapStore();
-
+  const venueIdSelected = useSideBarStore((state) => state.venueIdSelected);
   const { data, isLoading } = useGetVenueDetail(venueIdSelected ?? "");
 
   useEffect(() => {
