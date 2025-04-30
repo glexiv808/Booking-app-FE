@@ -1,17 +1,12 @@
-import { setVenueSearchedFormLocalStorage } from "@/lib/utils";
 import { create } from "zustand";
 
-type MapStore = {
+type MapStoreState = {
   venuesForMap: VenueMap[];
   setVenuesForMap: (venues: VenueMap[]) => void;
   coordinateVenues: CoordinateVenue[] | null;
   setCoordinateVenues: (venues: VenueMap[]) => void;
-  venueIdSelected: string | null;
-  setVenueIdSelected: (venue: string | null) => void;
   fieldTypes: FieldType[];
   setFieldTypes: (fieldTypes: FieldType[]) => void;
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
   searchFocused: boolean;
   setSearchFocused: (focused: boolean) => void;
   searchQuery: string;
@@ -20,12 +15,11 @@ type MapStore = {
   setTypeSportIdFilter: (id: number | null) => void;
 };
 
-export const useMapStore = create<MapStore>((set, get) => ({
+export const useMapStore = create<MapStoreState>((set, get) => ({
   venuesForMap: [],
   setVenuesForMap: (venues) => set({ venuesForMap: venues }),
   coordinateVenues: null,
   fieldTypes: [],
-
   setCoordinateVenues: (venues) => {
     const fieldTypes = get().fieldTypes; // Access fieldTypes directly from the store
     set({
@@ -46,14 +40,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
       ),
     });
   },
-  venueIdSelected: null,
-  setVenueIdSelected: (venue) => {
-    venue && setVenueSearchedFormLocalStorage(venue);
-    set({ venueIdSelected: venue });
-  },
   setFieldTypes: (fieldTypes) => set({ fieldTypes }),
-  sidebarOpen: false,
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
   searchFocused: false,
   setSearchFocused: (focused) => set({ searchFocused: focused }),
   searchQuery: "",

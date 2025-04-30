@@ -8,19 +8,20 @@ import Sidebar from "@/app/maps/SideBar";
 import { useGetVenueForMap } from "@/queries/useVenue";
 import { useMapStore } from "@/stores/useMapStore";
 import NavBar from "@/app/maps/NavBar";
-import { set } from "zod";
+import { useSideBarStore } from "@/stores/useSideBarStore";
 
 export default function MapPage() {
   const searchParams = useSearchParams();
-  const {
-    venuesForMap,
-    setVenuesForMap,
-    setCoordinateVenues,
-    setVenueIdSelected,
-    setFieldTypes,
-    setSidebarOpen,
-    setSearchFocused,
-  } = useMapStore();
+
+  const venuesForMap = useMapStore((state) => state.venuesForMap);
+  const setVenuesForMap = useMapStore((state) => state.setVenuesForMap);
+  const setCoordinateVenues = useMapStore((state) => state.setCoordinateVenues);
+  const setFieldTypes = useMapStore((state) => state.setFieldTypes);
+  const setSearchFocused = useMapStore((state) => state.setSearchFocused);
+  const setVenueIdSelected = useSideBarStore(
+    (state) => state.setVenueIdSelected
+  );
+  const setSidebarOpen = useSideBarStore((state) => state.setSidebarOpen);
   const venueId = searchParams.get("id");
 
   const { data } = useGetVenueForMap();

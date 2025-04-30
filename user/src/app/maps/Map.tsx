@@ -6,6 +6,7 @@ import envConfig from "@/config";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useMapStore } from "@/stores/useMapStore";
+import { useSideBarStore } from "@/stores/useSideBarStore";
 
 const MapComponent = () => {
   const center: [number, number] = [105.8423624, 20.9991199];
@@ -16,8 +17,9 @@ const MapComponent = () => {
   const route = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { sidebarOpen, coordinateVenues } = useMapStore();
-  const venueIdSelected = useMapStore((state) => state.venueIdSelected);
+  const coordinateVenues = useMapStore((state) => state.coordinateVenues);
+  const sidebarOpen = useSideBarStore((state) => state.sidebarOpen);
+  const venueIdSelected = useSideBarStore((state) => state.venueIdSelected);
   const [perVenueIdSelected, setPerVenueIdSelected] = useState<string | null>();
 
   const mapRef = useRef<maplibregl.Map | null>(null);
