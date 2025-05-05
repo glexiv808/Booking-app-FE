@@ -1,7 +1,7 @@
 "use client"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue, fetchVenueImgById, deleteVenueImgById } from "@/lib/api"
+import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue, fetchVenueImgById, deleteVenueImgById, fetchBooking } from "@/lib/api"
 import type { Venue, VenueImg } from "@/types/venue"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"

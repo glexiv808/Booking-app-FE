@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue"
 import UploadPage from "@/app/venue/venue_img/page"
 import { deleteVenueImgById } from "@/lib/api"
+import { BankSelector } from "./bank-selector"
 
 
 interface EditVenueFormProps {
@@ -51,6 +52,19 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
       })
     }
   }
+
+  const handleBankChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, bank_name: value }))
+
+    if (errors.bank_name) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors.bank_name
+        return newErrors
+      })
+    }
+  }
+
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -94,7 +108,7 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
   const handleMarkDeleteExistingImage = (imageId: string) => {
     // Đánh dấu ID đã bị xóa mềm
     setDeletedImageIds((prev) => [...prev, imageId]);
-    
+
     // Ẩn luôn ảnh khỏi giao diện
     setVenueImages((prev) => prev.filter((img) => img.image_id !== imageId));
   };
@@ -176,14 +190,8 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
               <Label htmlFor="bank_name" className="text-right">
                 Bank Name
               </Label>
-              <div className="col-span-3">
-                <Input
-                  id="bank_name"
-                  name="bank_name"
-                  value={formData.bank_name}
-                  onChange={handleChange}
-                  className={errors.bank_name ? "border-destructive" : ""}
-                />
+              <div className="col-span-3">        
+                <BankSelector   value={formData.bank_name} onChange={handleBankChange} error={errors.bank_name} />
                 {errors.bank_name && (
                   <p className="text-sm text-destructive mt-1">
                     {errors.bank_name}

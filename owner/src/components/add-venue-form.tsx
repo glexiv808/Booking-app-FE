@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { Venue, VenueImg } from "@/types/venue"
+import type { Venue } from "@/types/venue"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useCreateVenueMutation } from "@/queries/useVenue"
 import UploadPage from "@/app/venue/venue_img/page"
+import { BankSelector } from "@/components/bank-selector"
 
 interface AddVenueFormProps {
   isOpen: boolean
@@ -62,6 +63,18 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
       setErrors((prev) => {
         const newErrors = { ...prev }
         delete newErrors[name]
+        return newErrors
+      })
+    }
+  }
+
+  const handleBankChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, bank_name: value }))
+
+    if (errors.bank_name) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors.bank_name
         return newErrors
       })
     }
@@ -175,13 +188,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
                 Bank Name
               </Label>
               <div className="col-span-3">
-                <Input
-                  id="bank_name"
-                  name="bank_name"
-                  value={formData.bank_name}
-                  onChange={handleChange}
-                  className={errors.bank_name ? "border-destructive" : ""}
-                />
+                <BankSelector value={formData.bank_name} onChange={handleBankChange} error={errors.bank_name} />
                 {errors.bank_name && <p className="text-sm text-destructive mt-1">{errors.bank_name}</p>}
               </div>
             </div>
@@ -256,14 +263,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
                 Image:
               </Label>
               <div className="col-span-3">
-                <Input
-                  id="image"
-                  name="image"
-                  value={formData.latitude}
-                  onChange={handleChange}
-                  className={errors.latitude ? "border-destructive" : ""}
-                />
-                     <UploadPage />
+                <UploadPage />
                 {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
               </div>
             </div>

@@ -105,7 +105,7 @@ export default function EnhancedMultiImageUpload() {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg">
+        <div className="max-w-3xl mx-auto bg-white rounded-lg">
             <h2 className="text-sm font-bold mb-4">Upload Ảnh: </h2>
 
             <div className="mb-6">
