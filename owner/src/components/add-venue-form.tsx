@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCreateVenueMutation } from "@/queries/useVenue"
 import UploadPage from "@/app/venue/venue_img/page"
 import { BankSelector } from "@/components/bank-selector"
+import { getLatLngByName } from "@/utils/geocode"
 
 interface AddVenueFormProps {
   isOpen: boolean
@@ -42,6 +43,25 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
     longitude: "",
     latitude: "",
   })
+
+  useEffect(() => {
+    const fetchLatLng = async () => {
+      if (!formData.address?.trim()) return
+  
+      try {
+        const [lat, lng] = await getLatLngByName(formData.address)
+        setFormData((prev) => ({
+          ...prev,
+          latitude: lat.toString(),
+          longitude: lng.toString(),
+        }))
+      } catch (error) {
+        console.error("Failed to fetch lat/lng from address", error)
+      }
+    }
+  
+    fetchLatLng()
+  }, [formData.address])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -163,7 +183,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
               </div>
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 hidden">
               <Label htmlFor="status" className="text-right">
                 Status
               </Label>
@@ -227,7 +247,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
               </div>
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 hidden">
               <Label htmlFor="longitude" className="text-right">
                 Longitude
               </Label>
@@ -243,7 +263,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
               </div>
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 items-center gap-4 hidden">
               <Label htmlFor="closing" className="text-right">
                 Latitude:
               </Label>
@@ -258,6 +278,7 @@ export function AddVenueForm({ isOpen, onClose, onSuccess }: AddVenueFormProps) 
                 {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
               </div>
             </div>
+            
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="closing" className="text-right">
                 Image:
