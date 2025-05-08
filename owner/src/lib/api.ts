@@ -2,7 +2,7 @@ import type { Venue, VenueImg } from "@/types/venue"
 import { getAccessTokenFormLocalStorage } from "./utils";
 import { Booking, BookingStatsResponse } from "@/types/booking";
 import { Field } from "@/types/field";
-import { BookingRequest } from "@/types/court";
+import { BookingRequest, ScheduleRequest } from "@/types/court";
 
 const token = getAccessTokenFormLocalStorage();
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
@@ -346,26 +346,6 @@ export async function fetchFieldsByVenueId(id: string): Promise<Field[]> {
   }
 }
 
-// export async function lockedSlots(field_id: string, time_slots: string): Promise<BookingRequest> {
-//   try {
-//     const response = await fetch(`${API_BASE_URL}/bookings/locked-slots`, {
-//       method: "GET",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Accept: "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     })
-
-//     const data = await handleResponse(response)
-
-//     return data.data || data
-//   } catch (error) {
-//     console.error("Error fetching locked slots:", error)
-//     throw error
-//   }
-// }
-
 //API function to lock slots
 export async function lockedSlots(request: BookingRequest): Promise<any> {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT
@@ -373,6 +353,33 @@ export async function lockedSlots(request: BookingRequest): Promise<any> {
 
   try {
     const response = await fetch(`${API_BASE_URL}/bookings/lock`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(request),
+    })
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`)
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("Error locking slots:", error)
+    throw error
+  }
+}
+
+export async function mergeTimeSlot(request: ScheduleRequest): Promise<any> {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT
+  const token = getAccessTokenFormLocalStorage();
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/court/createSpecialTimes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
