@@ -2,18 +2,22 @@
 
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, Eye } from "lucide-react"
+import { Check, ChevronDown, ChevronUp, Eye } from "lucide-react"
 import type { Booking } from "@/types/booking"
+import { completeBookingById } from "@/lib/api"
+import { toast } from "@/components/ui/use-toast"
 
 interface BookingTableProps {
   bookings: Booking[]
 }
 
-export function BookingTable({ bookings }: BookingTableProps) {
+export function BookingTable({ bookings: initialBookings }: BookingTableProps) {
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({})
+  // const [bookingStatus, setBookingStatus] = useState(bookings[0].status)
+  const [bookings, setBookings] = useState<Booking[]>(initialBookings)
 
   const toggleRow = (bookingId: string) => {
     setExpandedRows((prev) => ({
@@ -55,6 +59,26 @@ export function BookingTable({ bookings }: BookingTableProps) {
       style: "currency",
       currency: "VND",
     }).format(price)
+  }
+
+  const disabledStatuses = ["pending", "completed", "cancelled"]
+
+  const handleComplete = async (booking_id: string) => {
+    try {
+      await completeBookingById(booking_id)
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking.booking_id === booking_id
+            ? { ...booking, status: "completed" }
+            : booking
+        )
+      )
+      toast({
+        title: "Update completed",
+      })
+    } catch (err) {
+      console.error("Error completing booking:", err)
+    }
   }
 
   if (bookings.length === 0) {
@@ -145,6 +169,37 @@ export function BookingTable({ bookings }: BookingTableProps) {
                           <span className="text-sm font-medium">Total Price:</span>
                           <span className="col-span-2 font-medium">{formatPrice(booking.total_price)}</span>
                         </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <Check className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Complete Booking</DialogTitle>
+                      </DialogHeader>
+                      <div>
+                        Make sure you have been paid, Action can't be undone
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <DialogClose asChild>
+                          <Button
+                            className="bg-green-500 hover:bg-green-600 text-white"
+                            onClick={() => handleComplete(booking.booking_id)}
+                            disabled={disabledStatuses.includes(booking.status)}
+                          >
+                            Complete
+                          </Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button className="bg-red-500 hover:bg-red-600 text-white">
+                            Cancel
+                          </Button>
+                        </DialogClose>
                       </div>
                     </DialogContent>
                   </Dialog>

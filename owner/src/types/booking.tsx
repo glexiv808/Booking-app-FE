@@ -1,5 +1,6 @@
 export interface Court {
   court_id: string;
+  court_name:string;
   start_time: string; // Format: "HH:mm:ss"
   end_time: string;   // Format: "HH:mm:ss"
   price: string;      // e.g. "200,000.00"
@@ -12,7 +13,7 @@ export interface Booking {
   total_price: string;
   customer_name: string;
   customer_phone: string;
-  status: 'pending' | 'completed' | 'cancelled' | string; // Extend as needed
+  status: 'completed'| 'pending' | 'cancelled' | string; // Extend as needed
   courts: Court[];
 }
 

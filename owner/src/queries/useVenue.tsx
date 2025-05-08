@@ -1,10 +1,11 @@
 "use client"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue, fetchVenueImgById, deleteVenueImgById, fetchBooking } from "@/lib/api"
+import { deleteVenue, fetchVenues, fetchVenueById, updateVenue, createVenue, fetchVenueImgById, deleteVenueImgById, fetchFieldsByVenueId } from "@/lib/api"
 import type { Venue, VenueImg } from "@/types/venue"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
+import { Field } from '@/types/field';
 
 // Query key for venues
 export const venuesKeys = {
@@ -27,6 +28,14 @@ export const useVenue = (id: string) => {
     queryFn: () => fetchVenueById(id),
     enabled: !!id,
   })
+}
+
+export function useField(venueId: string) {
+  return useQuery<Field[], Error>({
+    queryKey: ['venueField', venueId],
+    queryFn: () => fetchFieldsByVenueId(venueId),
+    enabled: !!venueId,
+  });
 }
 
 export function useVenueImg(venueId: string) {
