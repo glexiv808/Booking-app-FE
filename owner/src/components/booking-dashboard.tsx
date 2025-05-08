@@ -63,10 +63,10 @@ export function BookingDashboard() {
     setCurrentPage(page)
   }
 
-  const handleStatusFilterChange = (status: string | null) => {
-    setStatusFilter(status)
-    setCurrentPage(1) // Reset to first page when filter changes
-  }
+  // const handleStatusFilterChange = (status: string | null) => {
+  //   setStatusFilter(status)
+  //   setCurrentPage(1) 
+  // }
 
   if (loading && !bookingData) {
     return (
@@ -80,13 +80,13 @@ export function BookingDashboard() {
   if (error) {
     return (
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        {/* <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Booking Management</h1>
             <p className="text-muted-foreground">Manage and monitor all your court bookings in one place.</p>
           </div>
           <BookingFilter onFilterChange={handleStatusFilterChange} currentFilter={statusFilter} />
-        </div>
+        </div> */}
 
         <Card className="border-amber-200 bg-amber-50">
           <CardHeader className="pb-2">
@@ -155,7 +155,7 @@ export function BookingDashboard() {
           <h1 className="text-3xl font-bold tracking-tight">Booking Management</h1>
           <p className="text-muted-foreground">Manage and monitor all your court bookings in one place.</p>
         </div>
-        <BookingFilter onFilterChange={handleStatusFilterChange} currentFilter={statusFilter} />
+        {/* <BookingFilter onFilterChange={handleStatusFilterChange} currentFilter={statusFilter} /> */}
       </div>
 
       {bookingData && (

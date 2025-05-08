@@ -27,26 +27,6 @@ export function BookingStats({ totalCompletedPrice }: BookingStatsProps) {
           <p className="text-xs text-muted-foreground">From completed bookings</p>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Today's Bookings</CardTitle>
-          <CalendarCheck className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">--</div>
-          <p className="text-xs text-muted-foreground">Bookings for today</p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Upcoming Bookings</CardTitle>
-          <Clock className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">--</div>
-          <p className="text-xs text-muted-foreground">Pending bookings</p>
-        </CardContent>
-      </Card>
     </div>
   )
 }

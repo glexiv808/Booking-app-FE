@@ -174,7 +174,8 @@ export function BookingTable({ bookings: initialBookings }: BookingTableProps) {
                   </Dialog>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="icon">
+                      <Button variant="outline" size="icon"  disabled={disabledStatuses.includes(booking.status)}>
+                        
                         <Check className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
