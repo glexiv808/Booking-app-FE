@@ -52,6 +52,7 @@ export type BookingRequest = {
 export type CourtByField = {
     base_time_line: TimeLineEl[];
     courts: CourtMap;
+
 }
 
 export type CourtSchedule = {
@@ -68,3 +69,4 @@ export type TimeSlotMerge = {
     start_time: string;
     end_time: string;
   };
+

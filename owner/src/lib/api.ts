@@ -4,6 +4,7 @@ import { Booking, BookingStatsResponse } from "@/types/booking";
 import { Field } from "@/types/field";
 import { BookingRequest, ScheduleRequest } from "@/types/court";
 
+
 const token = getAccessTokenFormLocalStorage();
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:8000/api"
 
@@ -373,6 +374,7 @@ export async function lockedSlots(request: BookingRequest): Promise<any> {
     throw error
   }
 }
+
 
 export async function mergeTimeSlot(request: ScheduleRequest): Promise<any> {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT
