@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
-import { Loader2, X } from "lucide-react"
+import { Loader2, Pencil, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -19,10 +19,12 @@ import { Label } from "@/components/ui/label"
 import type { Venue, VenueImg } from "@/types/venue"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue"
-import UploadPage from "@/app/venue/venue_img/page"
-import { deleteVenueImgById } from "@/lib/api"
+import { addVenueImgById, deleteVenueImgById, updateVenueImgById } from "@/lib/api"
 import { BankSelector } from "./bank-selector"
 import { getLatLngByName } from "@/utils/geocode"
+import { ImageUploader } from "@/app/testUpload/ImageUploader"
+import { toast } from "sonner"
+import { useMutation } from "@tanstack/react-query"
 
 
 interface EditVenueFormProps {
@@ -39,7 +41,95 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
   const [originalFormData] = useState<Venue>({ ...venue });
   const updateVenueMutation = useUpdateVenueMutation()
   const [venueImages, setVenueImages] = useState<VenueImg[]>([]);
-  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
+  const [imageType, setImageType] = useState("default");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingImage, setEditingImage] = useState<VenueImg | null>(null);
+
+
+  //lấy link từ imageuploader
+  const handleImageUpload = (urls: string[]) => {
+    setUploadedUrls(urls);
+  };
+
+  //gửi ảnh lên db
+  const handleSubmitImages = async () => {
+    if (uploadedUrls.length === 0) {
+      // alert("Chưa có ảnh nào được upload!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await Promise.all(
+        uploadedUrls.map((url) =>
+          addVenueImgById(venue.venue_id, {
+            image_url: url,
+            type: imageType,
+          })
+        )
+      );
+      toast("Thêm ảnh thành công")
+    } catch (error) {
+      console.error("Lỗi khi thêm ảnh:", error);
+      toast("Thêm ảnh thất bại")
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  const handleDeleteImage = async (id: string, url: string) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa ảnh này?");
+    if (!confirm) return;
+
+    setDeletingId(id);
+    try {
+      await deleteVenueImgById(id);
+
+      // 👇 Xóa ảnh theo image_url
+      setVenueImages((prev) => prev.filter((img) => img.image_url !== url));
+
+      toast("Đã xóa ảnh thành công");
+    } catch (error) {
+      toast("Xóa ảnh thất bại");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const handleImageUpdate = (image: VenueImg) => {
+    ImageUploader
+  };
+
+  const handleUpdateImage = async (id: string, url: string) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa ảnh này?");
+    if (!confirm) return;
+
+    setDeletingId(id);
+    try {
+      ImageUploader
+      await Promise.all(
+        uploadedUrls.map((url) =>
+          updateVenueImgById(venue.venue_id,
+            url
+          )
+        )
+      );
+
+      // 👇 Xóa ảnh theo image_url
+      setVenueImages((prev) => prev.filter((img) => img.image_url !== url));
+
+
+      toast("Đã xóa ảnh thành công");
+    } catch (error) {
+      toast("Xóa ảnh thất bại");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -98,40 +188,24 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
-    useEffect(() => {
-      const fetchLatLng = async () => {
-        if (!formData.address?.trim()) return
-    
-        try {
-          const [lat, lng] = await getLatLngByName(formData.address)
-          setFormData((prev) => ({
-            ...prev,
-            latitude: lat.toString(),
-            longitude: lng.toString(),
-          }))
-        } catch (error) {
-          console.error("Failed to fetch lat/lng from address", error)
-        }
+  useEffect(() => {
+    const fetchLatLng = async () => {
+      if (!formData.address?.trim()) return
+
+      try {
+        const [lat, lng] = await getLatLngByName(formData.address)
+        setFormData((prev) => ({
+          ...prev,
+          latitude: lat.toString(),
+          longitude: lng.toString(),
+        }))
+      } catch (error) {
+        console.error("Failed to fetch lat/lng from address", error)
       }
-    
-      fetchLatLng()
-    }, [formData.address])
-  
+    }
 
-  const handleDelete = () => {
-    const imagesToDelete = venueImages.filter((img) => img.markedForDeletion);
-    imagesToDelete.forEach((img) => {
-      deleteVenueImgById(img.image_id);
-    });
-  };
-
-  const handleMarkDeleteExistingImage = (imageId: string) => {
-    // Đánh dấu ID đã bị xóa mềm
-    setDeletedImageIds((prev) => [...prev, imageId]);
-
-    // Ẩn luôn ảnh khỏi giao diện
-    setVenueImages((prev) => prev.filter((img) => img.image_id !== imageId));
-  };
+    fetchLatLng()
+  }, [formData.address])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -275,9 +349,6 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
             </div>
 
             <div className="grid grid-cols-1 items-center gap-4">
-              <Label htmlFor="closing" className="text-right">
-                Image:
-              </Label>
               {/* Existing Images Preview */}
               {venueImgs.length > 0 && (
                 <div>
@@ -293,15 +364,32 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                         <div className="absolute top-1 left-1 bg-black/70 text-white px-2 py-0.5 text-xs rounded">
                           {image.type}
                         </div>
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          className="absolute top-1 right-1 h-6 w-6 p-0"
-                          onClick={() => handleMarkDeleteExistingImage(image.image_id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                        <div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute top-1 right-1 h-6 w-6 p-0"
+                            onClick={() => handleDeleteImage(image.image_id, image.image_url)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute top-1 right-8 h-6 w-6 p-0 bg-green-100 hover:bg-green-200 z-10"
+                            onClick={() => handleImageUpdate(image)}
+                          >
+                            <Pencil className="h-4 w-4 text-green-500" />
+                            {/* 
+                            <div className="absolute right-8 z-0">
+                              <ImageUploader onUpload={handleImageUpload} />
+                            </div> */}
+                          </Button>
+
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -309,9 +397,24 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
               )}
 
 
-              <div className="col-span-3">
-                <UploadPage />
-                {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
+
+            </div>
+            <div className="grid grid-cols-2 items-center gap-4">
+              <ImageUploader onUpload={handleImageUpload} />
+              <div>
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                  Loại ảnh
+                </label>
+                <select
+                  id="type"
+                  value={imageType}
+                  onChange={(e) => setImageType(e.target.value)}
+                  className="mt-1 block w-60 px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm"
+                >
+                  <option value="cover">Cover</option>
+                  <option value="default">Default</option>
+                  <option value="thumbnail">Thumbnail</option>
+                </select>
               </div>
             </div>
           </div>
@@ -322,7 +425,7 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
             }}>
               Cancel
             </Button>
-            <Button type="submit" onClick={handleDelete} disabled={updateVenueMutation.isPending}>
+            <Button type="submit" onClick={handleSubmitImages} disabled={updateVenueMutation.isPending}>
               {updateVenueMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -134,33 +134,3 @@ export const useDeleteVenueMutation = () => {
     },
   })
 }
-
-export const useDeleteVenueImgMutation = () => {
-  const queryClient = useQueryClient()
-  const router = useRouter()
-
-  return useMutation({
-    mutationFn: (id: string) => deleteVenueImgById(id),
-    onSuccess: () => {
-      // Invalidate venues list to trigger refetch
-      queryClient.invalidateQueries({ queryKey: venuesKeys.all })
-
-      toast({
-        title: "Success",
-        description: "Venue deleted successfully",
-      })
-
-      // Navigate back to dashboard
-      router.push("/venue")
-    },
-    onError: (error) => {
-      console.error("Failed to delete venue:", error)
-      toast({
-        title: "Error",
-        description: "Failed to delete venue. Please try again.",
-        variant: "destructive",
-      })
-    },
-  })
-}
-

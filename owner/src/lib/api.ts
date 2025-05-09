@@ -156,7 +156,10 @@ export async function fetchVenueImgById(id: string): Promise<VenueImg[]> {
 }
 
 // Function to add venues Image by id
-export async function addVenueImgById(id: string, images: string[]): Promise<VenueImg[]> {
+export async function addVenueImgById(
+  id: string,
+  payload: { image_url: string; type: string }
+): Promise<VenueImg[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
       method: "POST",
@@ -165,14 +168,16 @@ export async function addVenueImgById(id: string, images: string[]): Promise<Ven
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-    })
-    const data = await handleResponse(res)
-    return data.data || data
+      body: JSON.stringify(payload),
+    });
+    const data = await handleResponse(res);
+    return data.data || data;
   } catch (error) {
-    console.error(`Error add venue image ${id}:`, error)
-    throw error
+    console.error(`Error add venue image ${id}:`, error);
+    throw error;
   }
 }
+
 
 // Function to delete venues Image by id
 export async function deleteVenueImgById(id: string): Promise<VenueImg[]> {
@@ -194,15 +199,16 @@ export async function deleteVenueImgById(id: string): Promise<VenueImg[]> {
 }
 
 // Function to update venues Image by id
-export async function updateVenueImgById(id: string): Promise<VenueImg[]> {
+export async function updateVenueImgById(id: string, image_url: string): Promise<VenueImg[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/venue-images/${id}`, {
-      method: "DELETE",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(image_url),
     })
     const data = await handleResponse(res)
     return data.data || data
@@ -211,6 +217,8 @@ export async function updateVenueImgById(id: string): Promise<VenueImg[]> {
     throw error
   }
 }
+
+
 interface FetchBookingsParams {
   page?: number
   status?: string | null
