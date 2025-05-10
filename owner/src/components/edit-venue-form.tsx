@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState } from "react"
-import { Loader2, Pencil, X } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Loader2, Pencil, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,40 +13,54 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { Venue, VenueImg } from "@/types/venue"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue"
-import { addVenueImgById, deleteVenueImgById, updateVenueImgById } from "@/lib/api"
-import { BankSelector } from "./bank-selector"
-import { getLatLngByName } from "@/utils/geocode"
-import { ImageUploader } from "@/app/testUpload/ImageUploader"
-import { toast } from "sonner"
-import { useMutation } from "@tanstack/react-query"
-
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { Venue, VenueImg } from "@/types/venue";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useUpdateVenueMutation, useVenueImg } from "@/queries/useVenue";
+import {
+  addVenueImgById,
+  deleteVenueImgById,
+  updateVenueImgById,
+} from "@/lib/api";
+import { BankSelector } from "./bank-selector";
+import { getLatLngByName } from "@/utils/geocode";
+import { ImageUploader } from "@/app/testUpload/ImageUploader";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 interface EditVenueFormProps {
-  venue: Venue
-  venueImgs: VenueImg[]
-  isOpen: boolean
-  onClose: () => void
-  onSave: (venue: Venue) => void
+  venue: Venue;
+  venueImgs: VenueImg[];
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (venue: Venue) => void;
 }
 
-export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: EditVenueFormProps) {
-  const [formData, setFormData] = useState<Venue>({ ...venue })
-  const [errors, setErrors] = useState<Record<string, string>>({})
+export function EditVenueForm({
+  venue,
+  isOpen,
+  onClose,
+  venueImgs,
+  onSave,
+}: EditVenueFormProps) {
+  const [formData, setFormData] = useState<Venue>({ ...venue });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [originalFormData] = useState<Venue>({ ...venue });
-  const updateVenueMutation = useUpdateVenueMutation()
+  const updateVenueMutation = useUpdateVenueMutation();
   const [venueImages, setVenueImages] = useState<VenueImg[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [imageType, setImageType] = useState("default");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingImage, setEditingImage] = useState<VenueImg | null>(null);
-
 
   //lấy link từ imageuploader
   const handleImageUpload = (urls: string[]) => {
@@ -70,16 +84,14 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
           })
         )
       );
-      toast("Thêm ảnh thành công")
+      toast("Thêm ảnh thành công");
     } catch (error) {
       console.error("Lỗi khi thêm ảnh:", error);
-      toast("Thêm ảnh thất bại")
+      toast("Thêm ảnh thất bại");
     } finally {
       setLoading(false);
     }
   };
-
-
 
   const handleDeleteImage = async (id: string, url: string) => {
     const confirm = window.confirm("Bạn có chắc muốn xóa ảnh này?");
@@ -101,7 +113,7 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
   };
 
   const handleImageUpdate = (image: VenueImg) => {
-    ImageUploader
+    ImageUploader;
   };
 
   const handleUpdateImage = async (id: string, url: string) => {
@@ -110,18 +122,13 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
 
     setDeletingId(id);
     try {
-      ImageUploader
+      ImageUploader;
       await Promise.all(
-        uploadedUrls.map((url) =>
-          updateVenueImgById(venue.venue_id,
-            url
-          )
-        )
+        uploadedUrls.map((url) => updateVenueImgById(venue.venue_id, url))
       );
 
       // 👇 Xóa ảnh theo image_url
       setVenueImages((prev) => prev.filter((img) => img.image_url !== url));
-
 
       toast("Đã xóa ảnh thành công");
     } catch (error) {
@@ -132,89 +139,87 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
       setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
-  }
+  };
 
   const handleBankChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, bank_name: value }))
+    setFormData((prev) => ({ ...prev, bank_name: value }));
 
     if (errors.bank_name) {
       setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors.bank_name
-        return newErrors
-      })
+        const newErrors = { ...prev };
+        delete newErrors.bank_name;
+        return newErrors;
+      });
     }
-  }
-
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
       setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
-  }
+  };
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Venue name is required"
+      newErrors.name = "Venue name is required";
     }
 
     if (!formData.bank_account_number.trim()) {
-      newErrors.bank_account_number = "Bank account number is required"
+      newErrors.bank_account_number = "Bank account number is required";
     }
 
     if (!formData.bank_name.trim()) {
-      newErrors.bank_name = "Bank name is required"
+      newErrors.bank_name = "Bank name is required";
     }
 
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   useEffect(() => {
     const fetchLatLng = async () => {
-      if (!formData.address?.trim()) return
+      if (!formData.address?.trim()) return;
 
       try {
-        const [lat, lng] = await getLatLngByName(formData.address)
+        const [lat, lng] = await getLatLngByName(formData.address);
         setFormData((prev) => ({
           ...prev,
           latitude: lat.toString(),
           longitude: lng.toString(),
-        }))
+        }));
       } catch (error) {
-        console.error("Failed to fetch lat/lng from address", error)
+        console.error("Failed to fetch lat/lng from address", error);
       }
-    }
+    };
 
-    fetchLatLng()
-  }, [formData.address])
+    fetchLatLng();
+  }, [formData.address]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     }
-    onSave(formData)
-  }
+    onSave(formData);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -285,7 +290,11 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                 Bank Name
               </Label>
               <div className="col-span-3">
-                <BankSelector value={formData.bank_name} onChange={handleBankChange} error={errors.bank_name} />
+                <BankSelector
+                  value={formData.bank_name}
+                  onChange={handleBankChange}
+                  error={errors.bank_name}
+                />
                 {errors.bank_name && (
                   <p className="text-sm text-destructive mt-1">
                     {errors.bank_name}
@@ -328,7 +337,11 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   onChange={handleChange}
                   className={errors.longitude ? "border-destructive" : ""}
                 />
-                {errors.longitude && <p className="text-sm text-destructive mt-1">{errors.longitude}</p>}
+                {errors.longitude && (
+                  <p className="text-sm text-destructive mt-1">
+                    {errors.longitude}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -344,7 +357,11 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   onChange={handleChange}
                   className={errors.latitude ? "border-destructive" : ""}
                 />
-                {errors.latitude && <p className="text-sm text-destructive mt-1">{errors.latitude}</p>}
+                {errors.latitude && (
+                  <p className="text-sm text-destructive mt-1">
+                    {errors.latitude}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -355,7 +372,10 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                   <h3 className="text-sm font-medium mb-2">Existing Images</h3>
                   <div className="grid grid-cols-1 gap-2">
                     {venueImgs.map((image) => (
-                      <div key={image.image_id} className="relative h-32 border rounded-md overflow-hidden">
+                      <div
+                        key={image.image_id}
+                        className="relative h-32 border rounded-md overflow-hidden"
+                      >
                         <img
                           src={image.image_url || "/placeholder.svg"}
                           alt="Venue preview"
@@ -370,7 +390,9 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                             variant="destructive"
                             size="sm"
                             className="absolute top-1 right-1 h-6 w-6 p-0"
-                            onClick={() => handleDeleteImage(image.image_id, image.image_url)}
+                            onClick={() =>
+                              handleDeleteImage(image.image_id, image.image_url)
+                            }
                           >
                             <X className="h-4 w-4" />
                           </Button>
@@ -388,21 +410,20 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
                               <ImageUploader onUpload={handleImageUpload} />
                             </div> */}
                           </Button>
-
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-
-
-
             </div>
             <div className="grid grid-cols-2 items-center gap-4">
               <ImageUploader onUpload={handleImageUpload} />
               <div>
-                <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Loại ảnh
                 </label>
                 <select
@@ -419,13 +440,21 @@ export function EditVenueForm({ venue, isOpen, onClose, venueImgs, onSave }: Edi
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => {
-              setFormData({ ...originalFormData });
-              onClose();
-            }}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setFormData({ ...originalFormData });
+                onClose();
+              }}
+            >
               Cancel
             </Button>
-            <Button type="submit" onClick={handleSubmitImages} disabled={updateVenueMutation.isPending}>
+            <Button
+              type="submit"
+              onClick={handleSubmitImages}
+              disabled={updateVenueMutation.isPending}
+            >
               {updateVenueMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
