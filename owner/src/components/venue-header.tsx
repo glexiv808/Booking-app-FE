@@ -47,7 +47,7 @@ export function DashboardHeader() {
           {pathname === "/venue" && (
             <>
             <BreadcrumbItem>
-              <BreadcrumbPage>Venue</BreadcrumbPage>
+                <BreadcrumbLink href="/venue">Venue</BreadcrumbLink>
             </BreadcrumbItem>
             {venue && (
                 <>
