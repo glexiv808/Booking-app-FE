@@ -1,6 +1,6 @@
 "use client"
 
-import {usePathname, useSearchParams} from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import {
   Breadcrumb,
@@ -21,8 +21,6 @@ export function DashboardHeader() {
   const [venue, setVenue] = useState<Venue | null>(null)
   const pathname = usePathname()
 
-  const isVenuePaymentPage = pathname === '/venuePayment'
-
   useEffect(() => {
     if (venueId) {
       const loadVenue = async () => {
@@ -41,30 +39,46 @@ export function DashboardHeader() {
   }, [venueId])
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-6">
+    <header className="fixed top-0 z-50 w-full flex h-16 items-center gap-4 border-b bg-background px-6">
       <SidebarTrigger />
       <Separator orientation="vertical" className="h-6" />
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/venue">Venue</BreadcrumbLink>
-          </BreadcrumbItem>
-          {venue && (
+          {pathname === "/venue" && (
             <>
-              {
-                isVenuePaymentPage && (
-                    <>
-                      <BreadcrumbSeparator />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>Venue Payment</BreadcrumbPage>
-                      </BreadcrumbItem>
-                    </>
-                  )
-              }
-              <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Venue</BreadcrumbPage>
+            </BreadcrumbItem>
+            {venue && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>{venue.name}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </>
+              )}
+              </>
+          )}
+
+          {pathname === "/venue/booking" && (
+            <BreadcrumbItem>
+              <BreadcrumbPage>Booking</BreadcrumbPage>
+            </BreadcrumbItem>
+          )}
+
+          {pathname === "/venuePayment" && (
+            <>
               <BreadcrumbItem>
-                <BreadcrumbPage>{venue.name}</BreadcrumbPage>
+                <BreadcrumbPage>Venue Payment</BreadcrumbPage>
               </BreadcrumbItem>
+              {venue && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>{venue.name}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </>
+              )}
             </>
           )}
         </BreadcrumbList>
