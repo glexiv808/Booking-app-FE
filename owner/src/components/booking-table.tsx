@@ -217,7 +217,7 @@ export function BookingTable({ bookings: initialBookings, onTotalPriceChange }: 
                         {booking.courts.map((court, index) => (
                           <div key={index} className="bg-background p-3 rounded-md border">
                             <div className="text-sm">
-                              <span className="font-medium">Court ID:</span> {court.court_id}
+                              <span className="font-medium">Court Name:</span> {court.court_name}
                             </div>
                             <div className="text-sm">
                               <span className="font-medium">Time:</span> {formatTime(court.start_time)} -{" "}
