@@ -44,33 +44,12 @@ export function DashboardHeader() {
       <Separator orientation="vertical" className="h-6" />
       <Breadcrumb>
         <BreadcrumbList>
-          {pathname === "/venue" && (
-            <>
-            <BreadcrumbItem>
-                <BreadcrumbLink href="/venue">Venue</BreadcrumbLink>
-            </BreadcrumbItem>
-            {venue && (
-                <>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{venue.name}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </>
-              )}
-              </>
-          )}
-
-          {pathname === "/venue/booking" && (
-            <BreadcrumbItem>
-              <BreadcrumbPage>Booking</BreadcrumbPage>
-            </BreadcrumbItem>
-          )}
-
-          {pathname === "/venuePayment" && (
+          {pathname.startsWith("/venue") && (
             <>
               <BreadcrumbItem>
-                <BreadcrumbPage>Venue Payment</BreadcrumbPage>
+                <BreadcrumbLink href="/venue">Venue</BreadcrumbLink>
               </BreadcrumbItem>
+
               {venue && (
                 <>
                   <BreadcrumbSeparator />
@@ -79,6 +58,60 @@ export function DashboardHeader() {
                   </BreadcrumbItem>
                 </>
               )}
+
+              {pathname.includes("/field") && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Field</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </>
+              )}
+
+            </>
+          )}
+
+          {pathname === "/venue/booking" && (
+            <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Booking</BreadcrumbPage>
+            </BreadcrumbItem>
+            </>
+          )}
+
+          {pathname === "/dashboard" && (
+            <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            </BreadcrumbItem>
+            </>
+          )}
+
+          {pathname === "/venue/stats" && (
+            <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Stats</BreadcrumbPage>
+            </BreadcrumbItem>
+            </>
+          )}
+
+          {pathname === "/venuePayment" && (
+            <>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Venue Payment</BreadcrumbPage>
+              </BreadcrumbItem>
+              {/* {venue && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>{venue.name}</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </>
+              )} */}
             </>
           )}
         </BreadcrumbList>

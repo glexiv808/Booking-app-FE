@@ -22,7 +22,7 @@ export default async function DashboardPage({
 
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full mt-16">
             <DashboardHeader/>
             {venueId ? (
                 <div className="flex-1 p-6">
@@ -31,7 +31,6 @@ export default async function DashboardPage({
             ) : (
                 <VenueTableWrapper></VenueTableWrapper>
             )}
-
         </div>
     )
 }

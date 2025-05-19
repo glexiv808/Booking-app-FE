@@ -53,7 +53,7 @@ export default function VenueTable({ venues }: VenueTableProps) {
     }
 
     return (
-        <Card className="p-6 shadow-lg space-y-6 bg-white rounded-lg">
+        <Card className="p-6 shadow-lg space-y-6 bg-white rounded-lg m-8">
             <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <Input
                     placeholder="Tìm theo tên hoặc địa chỉ..."
