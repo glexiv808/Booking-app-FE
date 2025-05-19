@@ -19,7 +19,7 @@ import { Booking } from "./Booking"
 import { toast } from "@/components/ui/use-toast"
 
 import { lockedSlots, mergeTimeSlot } from "@/lib/api"
-import {useQueryClient} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 function formatDateToYMD(date: Date): string {
@@ -260,8 +260,8 @@ export function VenueDetails({ venueId }: { venueId: string }) {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="md:w-2/3">
+        <div className="md:flex-row gap-6">
+          <div className="md:w-3/3">
             <Card>
               <CardHeader className="flex flex-row items-start justify-between">
                 <div>
@@ -272,17 +272,6 @@ export function VenueDetails({ venueId }: { venueId: string }) {
               <CardContent>
                 <Skeleton className="h-[200px] w-full" />
                 <Skeleton className="h-20 w-full mt-4" />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="md:w-1/3 space-y-6">
-            <Card>
-              <CardHeader>
-                <Skeleton className="h-6 w-32" />
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
               </CardContent>
             </Card>
           </div>
@@ -329,14 +318,14 @@ export function VenueDetails({ venueId }: { venueId: string }) {
                 )}
               </div>
               <div className="flex gap-2">
-                 <Button
-    variant="default"
-    size="sm"
-   onClick={() => router.push(`venue/fields?venueId=${venueId}`)}
-  >
-    <List className="h-4 w-4 mr-1" />
-    View Fields
-  </Button>
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => router.push(`venue/fields?venueId=${venueId}`)}
+                >
+                  <List className="h-4 w-4 mr-1" />
+                  View Fields
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
@@ -377,7 +366,7 @@ export function VenueDetails({ venueId }: { venueId: string }) {
 
                 <Card>
                   <CardContent>
-                    <div className="space-y-12 pt-6">
+                    <div className="space-y-12 pt-6 pl-32">
                       <div className="relative aspect-video max-h-[300px] overflow-hidden rounded-md border flex items-center justify-center">
                         {venueImg && venueImg.length > 0 ? (
                           <>
