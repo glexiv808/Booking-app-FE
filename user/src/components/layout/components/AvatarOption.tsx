@@ -10,6 +10,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export function AvatarOption() {
   return (
@@ -25,9 +26,11 @@ export function AvatarOption() {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              Booking
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            <DropdownMenuItem asChild>
+              <Link href="/booking/list">
+                Your booking
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              </Link>
             </DropdownMenuItem>
             {/* <DropdownMenuItem>
               Billing
